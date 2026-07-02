@@ -72,7 +72,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "stylesheet", href: appCss },
       { rel: "icon", type: "image/png", href: "/__l5e/assets-v1/a083104b-4bb3-4afd-8dbd-e8e303b136d5/tvn-logo.png" },
       { rel: "apple-touch-icon", href: "/__l5e/assets-v1/a083104b-4bb3-4afd-8dbd-e8e303b136d5/tvn-logo.png" },
-      { rel: "preconnect", href: "https://kzaoxtgonkvrjhfkwedy.supabase.co" },
+      { rel: "preconnect", href: "https://mzswogaxwyfolvktuyvg.supabase.co" },
     ],
     scripts: [
       {
