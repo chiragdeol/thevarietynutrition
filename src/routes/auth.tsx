@@ -27,7 +27,7 @@ function AuthPage() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (user) navigate({ to: "/account" });
+    if (user) navigate({ to: "/products" });
   }, [user, navigate]);
 
   async function handleEmail(e: React.FormEvent<HTMLFormElement>) {
