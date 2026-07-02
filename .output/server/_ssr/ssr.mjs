@@ -53,7 +53,7 @@ function renderErrorPage() {
 }
 var serverEntryPromise;
 async function getServerEntry() {
-	if (!serverEntryPromise) serverEntryPromise = import("./server-Bqtnojxs.mjs").then((m) => m.default ?? m);
+	if (!serverEntryPromise) serverEntryPromise = import("./server-DGsYwSUh.mjs").then((m) => m.default ?? m);
 	return serverEntryPromise;
 }
 async function normalizeCatastrophicSsrResponse(response) {
@@ -69,6 +69,18 @@ async function normalizeCatastrophicSsrResponse(response) {
 }
 var server_default = { async fetch(request, env, ctx) {
 	try {
+		const url = new URL(request.url);
+		if (url.pathname.startsWith("/__l5e/assets-v1/")) {
+			const targetUrl = `https://db321173-5345-4f58-aa33-627c2db2d84f.lovableproject.com${url.pathname}${url.search}`;
+			const headers = new Headers(request.headers);
+			headers.set("host", "db321173-5345-4f58-aa33-627c2db2d84f.lovableproject.com");
+			return await fetch(targetUrl, {
+				method: request.method,
+				headers,
+				body: ["GET", "HEAD"].includes(request.method) ? void 0 : request.body,
+				duplex: "half"
+			});
+		}
 		return await normalizeCatastrophicSsrResponse(await (await getServerEntry()).fetch(request, env, ctx));
 	} catch (error) {
 		console.error(error);

@@ -40,6 +40,22 @@ async function normalizeCatastrophicSsrResponse(response: Response): Promise<Res
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
     try {
+      const url = new URL(request.url);
+      if (url.pathname.startsWith('/__l5e/assets-v1/')) {
+        const targetUrl = `https://db321173-5345-4f58-aa33-627c2db2d84f.lovableproject.com${url.pathname}${url.search}`;
+        // Clone request headers to avoid mutations
+        const headers = new Headers(request.headers);
+        headers.set('host', 'db321173-5345-4f58-aa33-627c2db2d84f.lovableproject.com');
+        
+        return await fetch(targetUrl, {
+          method: request.method,
+          headers,
+          // Only pass body for non-GET/HEAD requests
+          body: ['GET', 'HEAD'].includes(request.method) ? undefined : request.body,
+          duplex: 'half'
+        } as any);
+      }
+
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);
       return await normalizeCatastrophicSsrResponse(response);

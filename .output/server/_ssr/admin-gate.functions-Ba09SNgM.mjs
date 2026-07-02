@@ -1,9 +1,9 @@
 import { r as __toESM } from "../_runtime.mjs";
 import { u as require_react } from "../_libs/@floating-ui/react-dom+[...].mjs";
 import { D as isRedirect, L as useRouter } from "../_libs/@tanstack/react-router+[...].mjs";
-import { t as getServerFnById } from "../__23tanstack-start-server-fn-resolver-CIKz9Fq5.mjs";
 import { i as TSS_SERVER_FUNCTION, l as createServerFn } from "./esm-Dova13aH.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/admin-gate.functions-P8FpBbox.js
+import { t as getServerFnById } from "../__23tanstack-start-server-fn-resolver-C7vu8F5Q.mjs";
+//#region node_modules/.nitro/vite/services/ssr/assets/admin-gate.functions-Ba09SNgM.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 function useServerFn(serverFn) {
 	const router = useRouter();
