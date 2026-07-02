@@ -1,7 +1,7 @@
 import { i as TSS_SERVER_FUNCTION, l as createServerFn } from "./esm-Dova13aH.mjs";
 import { r as useSession$1 } from "./request-response-Bv1MIUlU.mjs";
 import { createHash, timingSafeEqual } from "node:crypto";
-//#region node_modules/.nitro/vite/services/ssr/assets/admin-gate.functions-BFj74fff.js
+//#region node_modules/.nitro/vite/services/ssr/assets/admin-gate.functions-OE_24Y80.js
 var createServerRpc = (serverFnMeta, splitImportFn) => {
 	const url = "/_serverFn/" + serverFnMeta.id;
 	return Object.assign(splitImportFn, {
@@ -75,7 +75,7 @@ var adminStatus = createServerFn({ method: "GET" }).handler(adminStatus_createSe
 });
 async function admin() {
 	await requireAdmin();
-	const { supabaseAdmin } = await import("./client.server-Bw6iWMJ-.mjs");
+	const { supabaseAdmin } = await import("./client.server-DIGbIxU5.mjs");
 	return supabaseAdmin;
 }
 var adminListOrders_createServerFn_handler = createServerRpc({
@@ -327,7 +327,7 @@ var adminUploadMedia_createServerFn_handler = createServerRpc({
 }, (opts) => adminUploadMedia.__executeServer(opts));
 var adminUploadMedia = createServerFn({ method: "POST" }).inputValidator((d) => d).handler(adminUploadMedia_createServerFn_handler, async ({ data }) => {
 	await requireAdmin();
-	const { supabaseAdmin } = await import("./client.server-Bw6iWMJ-.mjs");
+	const { supabaseAdmin } = await import("./client.server-DIGbIxU5.mjs");
 	const { data: buckets } = await supabaseAdmin.storage.listBuckets();
 	if (!buckets?.find((b) => b.name === "media")) await supabaseAdmin.storage.createBucket("media", { public: true });
 	const safe = data.filename.replace(/[^a-zA-Z0-9._-]/g, "_");
