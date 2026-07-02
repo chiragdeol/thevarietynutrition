@@ -1,12 +1,12 @@
 {
-  "date": "2026-07-02T08:46:18.682Z",
+  "date": "2026-07-02T09:29:12.075Z",
   "preset": "node-server",
   "framework": {
     "name": "nitro",
-    "version": "3.0.260603-beta"
+    "version": "3.0.260610-beta"
   },
   "versions": {
-    "nitro": "3.0.260603-beta"
+    "nitro": "3.0.260610-beta"
   },
   "serverEntry": "server/index.mjs",
   "publicDir": "public",
