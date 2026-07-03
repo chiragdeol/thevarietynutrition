@@ -9,7 +9,7 @@ import { _ as useSearch, g as useNavigate, h as Link } from "../_libs/@tanstack/
 import { t as Input } from "./input-NvmijQlt.mjs";
 import { t as Label } from "./label-AutfcB-T.mjs";
 import { n as toast } from "../_libs/sonner.mjs";
-import { D as Leaf, W as Sparkles, p as ShieldCheck, s as Truck, w as Mail, y as Phone } from "../_libs/lucide-react.mjs";
+import { O as Leaf, T as Mail, b as Phone, p as ShieldCheck, q as Sparkles, s as Truck } from "../_libs/lucide-react.mjs";
 import { t as tvn_logo_png_asset_default } from "./tvn-logo.png.asset-LrE-vGw3.mjs";
 import { t as BRAND } from "./brand-DfYeJUSd.mjs";
 import { n as stringType, t as objectType } from "../_libs/zod.mjs";

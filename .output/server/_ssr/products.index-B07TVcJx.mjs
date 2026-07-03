@@ -6,7 +6,7 @@ import { t as Button } from "./button-BpE9Czok.mjs";
 import { t as useQuery } from "../_libs/tanstack__react-query.mjs";
 import { t as Input } from "./input-NvmijQlt.mjs";
 import { n as toast } from "../_libs/sonner.mjs";
-import { G as LoaderCircle, W as Sparkles, h as Search, x as MessageCircle } from "../_libs/lucide-react.mjs";
+import { J as LoaderCircle, S as MessageCircle, h as Search, q as Sparkles } from "../_libs/lucide-react.mjs";
 import { n as whatsappUrl, t as BRAND } from "./brand-DfYeJUSd.mjs";
 import { t as ProductCard } from "./ProductCard-BRhZZu1J.mjs";
 //#region node_modules/.nitro/vite/services/ssr/assets/products.index-B07TVcJx.js

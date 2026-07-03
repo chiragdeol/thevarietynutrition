@@ -3,7 +3,7 @@ import { t as Button } from "./button-BpE9Czok.mjs";
 import { t as formatINR } from "./format-Br5XBkvk.mjs";
 import { h as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { n as toast } from "../_libs/sonner.mjs";
-import { c as Trash2, f as ShoppingBag, k as Heart } from "../_libs/lucide-react.mjs";
+import { A as Heart, c as Trash2, f as ShoppingBag } from "../_libs/lucide-react.mjs";
 import { n as useCart } from "./cart-JVZU3Fe9.mjs";
 import { r as useWishlist } from "./wishlist-D-kkRxhE.mjs";
 //#region node_modules/.nitro/vite/services/ssr/assets/wishlist-CzrheKhS.js

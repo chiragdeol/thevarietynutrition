@@ -6,7 +6,7 @@ import { L as useRouter } from "../_libs/@tanstack/react-router+[...].mjs";
 import { O as useServerFn, T as adminStatus, h as adminLogin } from "./admin-gate.functions-v80PLrYD.mjs";
 import { t as Input } from "./input-NvmijQlt.mjs";
 import { t as Label } from "./label-AutfcB-T.mjs";
-import { E as Lock } from "../_libs/lucide-react.mjs";
+import { D as Lock } from "../_libs/lucide-react.mjs";
 //#region node_modules/.nitro/vite/services/ssr/assets/admin-login-CnNPapQM.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();

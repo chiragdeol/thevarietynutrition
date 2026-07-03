@@ -4,7 +4,7 @@ import { t as Button } from "./button-BpE9Czok.mjs";
 import { t as formatINR } from "./format-Br5XBkvk.mjs";
 import { h as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { t as useQuery } from "../_libs/tanstack__react-query.mjs";
-import { _ as Plus, b as Minus, f as ShoppingBag, n as X, p as ShieldCheck, s as Truck, u as Tag, x as MessageCircle } from "../_libs/lucide-react.mjs";
+import { S as MessageCircle, f as ShoppingBag, n as X, p as ShieldCheck, s as Truck, u as Tag, v as Plus, x as Minus } from "../_libs/lucide-react.mjs";
 import { n as whatsappUrl, t as BRAND } from "./brand-DfYeJUSd.mjs";
 import { n as useCart } from "./cart-JVZU3Fe9.mjs";
 import { t as ProductCard } from "./ProductCard-BRhZZu1J.mjs";

@@ -43,15 +43,6 @@ function Checkout() {
       </div>
     );
 
-  if (!user)
-    return (
-      <div className="mx-auto max-w-xl px-4 py-20 text-center">
-        <h1 className="font-serif text-3xl">Sign in to checkout</h1>
-        <p className="text-muted-foreground mt-2">Create an account or sign in to place your order.</p>
-        <Button asChild className="mt-6 bg-accent hover:bg-accent/90 text-accent-foreground"><Link to="/auth">Sign in</Link></Button>
-      </div>
-    );
-
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const fd = new FormData(e.currentTarget);
@@ -63,11 +54,11 @@ function Checkout() {
     setSubmitting(true);
     try {
       const { data: order, error } = await supabase
-        .from("orders")
-        .insert({
-          user_id: user!.id,
-          ...parsed.data,
-          subtotal_cents: subtotal,
+          .from("orders")
+          .insert({
+            user_id: user?.id || null,
+            ...parsed.data,
+            subtotal_cents: subtotal,
           shipping_cents: shipping,
           total_cents: total,
         })

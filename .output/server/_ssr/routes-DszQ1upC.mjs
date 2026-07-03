@@ -6,7 +6,7 @@ import { u as require_react } from "../_libs/@floating-ui/react-dom+[...].mjs";
 import { n as cn, t as Button } from "./button-BpE9Czok.mjs";
 import { h as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { t as useQuery } from "../_libs/tanstack__react-query.mjs";
-import { D as Leaf, F as ChevronRight, I as ChevronLeft, O as Instagram, V as Award, d as Star, i as Volume2, p as ShieldCheck, q as BadgeCheck, r as VolumeX, s as Truck, v as Play } from "../_libs/lucide-react.mjs";
+import { L as ChevronRight, O as Leaf, R as ChevronLeft, U as Award, X as BadgeCheck, d as Star, i as Volume2, k as Instagram, p as ShieldCheck, r as VolumeX, s as Truck, y as Play } from "../_libs/lucide-react.mjs";
 import { t as BRAND } from "./brand-DfYeJUSd.mjs";
 import { t as ProductCard } from "./ProductCard-BRhZZu1J.mjs";
 //#region node_modules/.nitro/vite/services/ssr/assets/routes-DszQ1upC.js
