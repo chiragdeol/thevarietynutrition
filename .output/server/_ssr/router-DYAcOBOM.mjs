@@ -16,10 +16,10 @@ import { n as whatsappUrl } from "./brand-DfYeJUSd.mjs";
 import { n as useCart, t as CartProvider } from "./cart-JVZU3Fe9.mjs";
 import { r as useWishlist, t as WishlistProvider } from "./wishlist-D-kkRxhE.mjs";
 import { t as Route$17 } from "./category._slug-CzF3KXck.mjs";
-import { t as Route$18 } from "./order._id-envMd2MG.mjs";
+import { t as Route$18 } from "./order._id-QBaadHDf.mjs";
 import { t as Route$19 } from "./products._slug-BMAE4i1Y.mjs";
 import { t as Route$20 } from "./recipes._slug-DIiM-xxA.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-JZ5LrlIa.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-DYAcOBOM.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var styles_default = "/assets/styles-Tqvg1-kg.css";
@@ -732,7 +732,7 @@ var Route$7 = createFileRoute("/auth")({
 	head: () => ({ meta: [{ title: "Sign in — The Variety Nutrition" }] }),
 	component: lazyRouteComponent($$splitComponentImporter$7, "component")
 });
-var $$splitComponentImporter$6 = () => import("./admin-login-BGb0IphN.mjs");
+var $$splitComponentImporter$6 = () => import("./admin-login-OZTpcTqc.mjs");
 var Route$6 = createFileRoute("/admin-login")({
 	ssr: false,
 	head: () => ({ meta: [{ title: "Admin Login — The Variety Nutrition" }, {
@@ -741,7 +741,7 @@ var Route$6 = createFileRoute("/admin-login")({
 	}] }),
 	component: lazyRouteComponent($$splitComponentImporter$6, "component")
 });
-var $$splitComponentImporter$5 = () => import("./admin-BsG1bcko.mjs");
+var $$splitComponentImporter$5 = () => import("./admin-CLA6Eyoz.mjs");
 var Route$5 = createFileRoute("/admin")({
 	ssr: false,
 	head: () => ({ meta: [{ title: "Admin — The Variety Nutrition" }, {
