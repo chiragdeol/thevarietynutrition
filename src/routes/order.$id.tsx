@@ -33,7 +33,7 @@ function OrderSuccess() {
 
   const isPending = data.order.status === "pending";
   const amount = (data.order.total_cents / 100).toFixed(2);
-  const upiId = "thevarietynutrition@paytm"; // Configured payee UPI ID
+  const upiId = "9870903026@jupiteraxis"; // Configured payee UPI ID
   const payeeName = "The Variety Nutrition";
   const transactionNote = `Order ${data.order.order_number}`;
   const upiLink = `upi://pay?pa=${encodeURIComponent(upiId)}&pn=${encodeURIComponent(payeeName)}&am=${amount}&cu=INR&tn=${encodeURIComponent(transactionNote)}`;
