@@ -97,8 +97,8 @@ function Checkout() {
           <div className="bg-card rounded-xl p-6 border border-border space-y-4">
             <h2 className="font-serif text-xl">Contact</h2>
             <div className="grid sm:grid-cols-2 gap-4">
-              <div><Label htmlFor="customer_name">Full name</Label><Input id="customer_name" name="customer_name" defaultValue={user.user_metadata?.full_name ?? ""} required /></div>
-              <div><Label htmlFor="customer_email">Email</Label><Input id="customer_email" name="customer_email" type="email" defaultValue={user.email ?? ""} required /></div>
+              <div><Label htmlFor="customer_name">Full name</Label><Input id="customer_name" name="customer_name" defaultValue={user?.user_metadata?.full_name ?? ""} required /></div>
+              <div><Label htmlFor="customer_email">Email</Label><Input id="customer_email" name="customer_email" type="email" defaultValue={user?.email ?? ""} required /></div>
               <div className="sm:col-span-2"><Label htmlFor="customer_phone">Phone</Label><Input id="customer_phone" name="customer_phone" required /></div>
             </div>
           </div>
