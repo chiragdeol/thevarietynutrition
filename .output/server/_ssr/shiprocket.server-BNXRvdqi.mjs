@@ -1,6 +1,6 @@
 import { l as createServerFn } from "./esm-Dova13aH.mjs";
 import { t as createServerRpc } from "./createServerRpc-WJgk8O8C.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/shiprocket.server-nFiWMRU_.js
+//#region node_modules/.nitro/vite/services/ssr/assets/shiprocket.server-BNXRvdqi.js
 var cachedToken = null;
 var tokenExpiry = null;
 async function getShiprocketToken() {
@@ -44,7 +44,7 @@ var shiprocketBookShipment = createServerFn({ method: "POST" }).inputValidator((
 	const firstName = nameParts[0] || "Customer";
 	const lastName = nameParts.slice(1).join(" ") || ".";
 	const totalWeight = .5;
-	const pickupLocation = process.env.SHIPROCKET_PICKUP_LOCATION || "Primary";
+	const pickupLocation = process.env.SHIPROCKET_PICKUP_LOCATION || "THE VARIETY NUTRITION  - Rohtak";
 	const payload = {
 		order_id: order.order_number,
 		order_date: new Date(order.created_at).toISOString().slice(0, 16).replace("T", " "),

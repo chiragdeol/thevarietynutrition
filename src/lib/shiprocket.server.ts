@@ -73,7 +73,7 @@ export const shiprocketBookShipment = createServerFn({ method: "POST" })
 
     // Default weight is 0.5kg (500g), or calculate roughly if weight info is available
     const totalWeight = 0.5; 
-    const pickupLocation = process.env.SHIPROCKET_PICKUP_LOCATION || "Primary";
+    const pickupLocation = process.env.SHIPROCKET_PICKUP_LOCATION || "THE VARIETY NUTRITION  - Rohtak";
 
     const payload = {
       order_id: order.order_number,
