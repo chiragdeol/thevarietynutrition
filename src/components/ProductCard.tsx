@@ -53,9 +53,19 @@ export function ProductCard({ p }: { p: ProductCardData }) {
         </button>
       </div>
       <Link to="/products/$slug" params={{ slug: p.slug }} className="block bg-secondary overflow-hidden min-h-[18rem] md:min-h-[24rem] flex items-center justify-center p-4">
-        {p.image_url && (
-          <img src={p.image_url} alt={p.name} loading="lazy" decoding="async" className="w-full h-auto max-h-[22rem] md:max-h-[28rem] object-contain mx-auto group-hover:scale-[1.02] transition-transform duration-500" />
-        )}
+        <img
+          src={p.image_url || "/images/prod-placeholder.jpg"}
+          alt={p.name}
+          loading="lazy"
+          decoding="async"
+          className="w-full h-auto max-h-[22rem] md:max-h-[28rem] object-contain mx-auto group-hover:scale-[1.02] transition-transform duration-500"
+          onError={(e) => {
+            const t = e.currentTarget;
+            if (!t.src.endsWith("/images/prod-placeholder.jpg")) {
+              t.src = "/images/prod-placeholder.jpg";
+            }
+          }}
+        />
       </Link>
       <div className="p-4 flex-1 flex flex-col">
         <Link to="/products/$slug" params={{ slug: p.slug }} className="font-serif text-lg leading-tight hover:text-accent">
