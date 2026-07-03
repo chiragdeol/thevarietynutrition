@@ -1,12 +1,77 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
 import { formatINR } from "@/lib/format";
 import { CheckCircle2, QrCode, ClipboardCheck, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
+import { createServerFn } from "@tanstack/react-start";
+
+// Server function to fetch order details securely without exposing public select policies
+export const getOrderDetails = createServerFn({ method: "GET" })
+  .inputValidator((id: string) => id)
+  .handler(async ({ data: id }) => {
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+    if (!uuidRegex.test(id)) {
+      throw new Error("Invalid Order ID format");
+    }
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+    const { data: order, error: oErr } = await supabaseAdmin
+      .from("orders")
+      .select("*")
+      .eq("id", id)
+      .maybeSingle();
+
+    if (oErr) throw new Error(oErr.message);
+    if (!order) return null;
+
+    const { data: items, error: iErr } = await supabaseAdmin
+      .from("order_items")
+      .select("*")
+      .eq("order_id", id);
+
+    if (iErr) throw new Error(iErr.message);
+
+    return { order, items: items ?? [] };
+  });
+
+// Server function to submit payment UTR code securely without exposing public update policies
+export const submitOrderPayment = createServerFn({ method: "POST" })
+  .inputValidator((d: { id: string; utr: string }) => d)
+  .handler(async ({ data }) => {
+    const { id, utr } = data;
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+    if (!uuidRegex.test(id)) throw new Error("Invalid Order ID format");
+    if (!utr.trim() || utr.trim().length < 8) throw new Error("Invalid UTR code");
+
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+    const { data: order, error: fetchErr } = await supabaseAdmin
+      .from("orders")
+      .select("notes, status")
+      .eq("id", id)
+      .maybeSingle();
+
+    if (fetchErr) throw new Error(fetchErr.message);
+    if (!order) throw new Error("Order not found");
+
+    const updatedNotes = order.notes
+      ? `${order.notes}\n[Payment Submitted] UTR: ${utr.trim()}`
+      : `[Payment Submitted] UTR: ${utr.trim()}`;
+
+    const { error: updateErr } = await supabaseAdmin
+      .from("orders")
+      .update({
+        status: "paid",
+        notes: updatedNotes,
+      })
+      .eq("id", id);
+
+    if (updateErr) throw new Error(updateErr.message);
+    return { success: true };
+  });
 
 export const Route = createFileRoute("/order/$id")({
   head: () => ({ meta: [{ title: "Order Details — The Variety Nutrition" }] }),
@@ -21,10 +86,9 @@ function OrderSuccess() {
   const { data, isLoading, refetch } = useQuery({
     queryKey: ["order", id],
     queryFn: async () => {
-      const { data: order } = await supabase.from("orders").select("*").eq("id", id).maybeSingle();
-      if (!order) throw notFound();
-      const { data: items } = await supabase.from("order_items").select("*").eq("order_id", id);
-      return { order, items: items ?? [] };
+      const res = await getOrderDetails({ data: id });
+      if (!res) throw notFound();
+      return res;
     },
   });
 
@@ -47,19 +111,7 @@ function OrderSuccess() {
     }
     setSubmitting(true);
     try {
-      const updatedNotes = data.order.notes
-        ? `${data.order.notes}\n[Payment Submitted] UTR: ${utr.trim()}`
-        : `[Payment Submitted] UTR: ${utr.trim()}`;
-
-      const { error } = await supabase
-        .from("orders")
-        .update({
-          status: "paid", // Move to paid (Paid / Pending Verification)
-          notes: updatedNotes,
-        })
-        .eq("id", id);
-
-      if (error) throw error;
+      await submitOrderPayment({ data: { id, utr: utr.trim() } });
       toast.success("Payment details submitted successfully! Your order is now being processed.");
       refetch();
     } catch (err: any) {
