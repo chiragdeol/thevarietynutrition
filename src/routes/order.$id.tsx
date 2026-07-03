@@ -1,7 +1,7 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { formatINR } from "@/lib/format";
-import { CheckCircle2, QrCode, ClipboardCheck, ArrowRight } from "lucide-react";
+import { CheckCircle2, QrCode, ClipboardCheck, ArrowRight, Truck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
@@ -197,6 +197,44 @@ function OrderSuccess() {
           <p className="text-sm text-emerald-700 dark:text-emerald-300 mt-2">
             Thank you! Your payment details have been submitted. Our team will verify the payment manually and prepare your package for shipping.
           </p>
+        </div>
+      )}
+
+      {/* Shipping / Tracking Details */}
+      {data.order.shiprocket_shipment_id && (
+        <div className="bg-card border border-border rounded-xl p-6 mt-6 text-left shadow-sm">
+          <h3 className="font-serif text-lg font-medium mb-3 text-primary flex items-center gap-2">
+            <Truck className="w-5 h-5 text-accent" /> Track Shipment
+          </h3>
+          <div className="space-y-2 text-sm">
+            <div>
+              <span className="text-muted-foreground">Shipping Status:</span>{" "}
+              <span className="capitalize font-semibold text-accent">{data.order.status}</span>
+            </div>
+            {data.order.courier_name && (
+              <div>
+                <span className="text-muted-foreground">Courier Partner:</span>{" "}
+                <span className="font-medium">{data.order.courier_name}</span>
+              </div>
+            )}
+            {data.order.tracking_number && (
+              <div>
+                <span className="text-muted-foreground">Tracking Number (AWB):</span>{" "}
+                <span className="font-mono font-medium">{data.order.tracking_number}</span>
+              </div>
+            )}
+            <div className="pt-2">
+              <Button asChild size="sm" className="bg-accent hover:bg-accent/90 text-accent-foreground">
+                <a
+                  href={`https://shiprocket.co/tracking/${data.order.shiprocket_shipment_id}`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Track Live Shipment
+                </a>
+              </Button>
+            </div>
+          </div>
         </div>
       )}
 

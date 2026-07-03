@@ -32,6 +32,7 @@ import {
   adminReorderMedia,
 } from "@/lib/admin-gate.functions";
 import { Button } from "@/components/ui/button";
+import { shiprocketBookShipment } from "@/lib/shiprocket.server";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
@@ -339,11 +340,27 @@ function OrdersAdmin() {
   const qc = useQueryClient();
   const list = useServerFn(adminListOrders);
   const update = useServerFn(adminUpdateOrderStatus);
+  const bookShipment = useServerFn(shiprocketBookShipment);
   const [expanded, setExpanded] = useState<string | null>(null);
+  const [bookingId, setBookingId] = useState<string | null>(null);
   const { data } = useQuery({ queryKey: ["adm-orders"], queryFn: () => list({}) });
+
   async function change(id: string, status: string) {
     try { await update({ data: { id, status } }); toast.success("Updated"); qc.invalidateQueries({ queryKey: ["adm-orders"] }); }
     catch (e: any) { toast.error(e.message); }
+  }
+
+  async function handleBookShipment(id: string) {
+    setBookingId(id);
+    try {
+      await bookShipment({ data: id });
+      toast.success("Shipment booked with Shiprocket!");
+      qc.invalidateQueries({ queryKey: ["adm-orders"] });
+    } catch (e: any) {
+      toast.error(e.message || "Failed to book shipment");
+    } finally {
+      setBookingId(null);
+    }
   }
   return (
     <div className="mt-6 space-y-3">
@@ -383,6 +400,50 @@ function OrdersAdmin() {
                       <div><span className="text-muted-foreground">Phone:</span> <a href={`tel:${o.customer_phone}`} className="font-medium text-accent hover:underline">{o.customer_phone}</a> · <a href={`https://wa.me/${o.customer_phone.replace(/\D/g, "")}`} target="_blank" rel="noreferrer" className="text-xs text-emerald-600 hover:underline">WhatsApp</a></div>
                     )}
                     {o.notes && <div className="pt-2"><span className="text-muted-foreground">Notes:</span> <span className="italic">{o.notes}</span></div>}
+
+                    {/* Shiprocket Section */}
+                    <div className="mt-4 pt-4 border-t border-border/60">
+                      <h5 className="font-semibold text-xs uppercase tracking-wide text-muted-foreground mb-2">Shiprocket Courier</h5>
+                      {o.shiprocket_shipment_id ? (
+                        <div className="space-y-1">
+                          <div>
+                            <span className="text-muted-foreground">Shipment ID:</span>{" "}
+                            <span className="font-mono font-medium">{o.shiprocket_shipment_id}</span>
+                          </div>
+                          {o.shiprocket_order_id && (
+                            <div>
+                              <span className="text-muted-foreground">Shiprocket Order ID:</span>{" "}
+                              <span className="font-mono font-medium">{o.shiprocket_order_id}</span>
+                            </div>
+                          )}
+                          <div className="pt-1">
+                            <a
+                              href={`https://shiprocket.co/tracking/${o.shiprocket_shipment_id}`}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="text-xs text-accent hover:underline font-medium"
+                            >
+                              Track on Shiprocket Dashboard
+                            </a>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="space-y-2">
+                          <p className="text-xs text-muted-foreground">Not shipped yet.</p>
+                          {o.status === "paid" && (
+                            <Button
+                              size="sm"
+                              type="button"
+                              disabled={bookingId === o.id}
+                              onClick={() => handleBookShipment(o.id)}
+                              className="bg-accent hover:bg-accent/90 text-accent-foreground text-xs h-8"
+                            >
+                              {bookingId === o.id ? "Booking..." : "Ship via Shiprocket"}
+                            </Button>
+                          )}
+                        </div>
+                      )}
+                    </div>
                   </div>
                   <h4 className="font-semibold mt-4 mb-2 text-sm uppercase tracking-wide text-muted-foreground">Shipping address</h4>
                   <div className="text-sm leading-relaxed">
