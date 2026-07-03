@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { Leaf, ShieldCheck, Truck, Sparkles } from "lucide-react";
+import { Leaf, ShieldCheck, Truck, Sparkles, Phone, Mail } from "lucide-react";
 import heroImg from "@/assets/hero-nuts.png.asset.json";
 import logoImg from "@/assets/tvn-logo.png.asset.json";
 import { BRAND } from "@/lib/brand";
@@ -26,9 +26,51 @@ function AuthPage() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
+  const [authMethod, setAuthMethod] = useState<"email" | "phone">("email");
+  const [phone, setPhone] = useState("");
+  const [otp, setOtp] = useState("");
+  const [otpSent, setOtpSent] = useState(false);
+
   useEffect(() => {
     if (user) navigate({ to: "/products" });
   }, [user, navigate]);
+
+  async function handleSendOtp(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    if (!phone.trim()) return toast.error("Please enter a valid phone number");
+    setLoading(true);
+    try {
+      const { error } = await supabase.auth.signInWithOtp({
+        phone: phone.trim(),
+      });
+      if (error) throw error;
+      setOtpSent(true);
+      toast.success("OTP sent to your phone number!");
+    } catch (err: any) {
+      toast.error(err.message || "Failed to send OTP. Make sure SMS provider is set up in Supabase.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function handleVerifyOtp(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    if (!otp.trim()) return toast.error("Please enter the 6-digit OTP");
+    setLoading(true);
+    try {
+      const { error } = await supabase.auth.verifyOtp({
+        phone: phone.trim(),
+        token: otp.trim(),
+        type: "sms",
+      });
+      if (error) throw error;
+      toast.success("Welcome!");
+    } catch (err: any) {
+      toast.error(err.message || "Invalid OTP code");
+    } finally {
+      setLoading(false);
+    }
+  }
 
   async function handleEmail(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -162,31 +204,116 @@ function AuthPage() {
           </Button>
 
           <div className="my-6 flex items-center gap-3 text-xs text-muted-foreground">
-            <div className="h-px flex-1 bg-border" /> OR CONTINUE WITH EMAIL <div className="h-px flex-1 bg-border" />
+            <div className="h-px flex-1 bg-border" /> OR CONTINUE WITH <div className="h-px flex-1 bg-border" />
           </div>
 
-          <form onSubmit={handleEmail} className="space-y-4">
-            {isSignup && (
-              <div>
-                <Label htmlFor="full_name">Full name</Label>
-                <Input id="full_name" name="full_name" placeholder="Your name" className="h-11 mt-1.5" required />
-              </div>
-            )}
-            <div>
-              <Label htmlFor="email">Email</Label>
-              <Input id="email" name="email" type="email" placeholder="you@example.com" className="h-11 mt-1.5" required />
-            </div>
-            <div>
-              <div className="flex items-center justify-between">
-                <Label htmlFor="password">Password</Label>
-                {!isSignup && <span className="text-xs text-muted-foreground">Min. 6 characters</span>}
-              </div>
-              <Input id="password" name="password" type="password" placeholder="••••••••" className="h-11 mt-1.5" minLength={6} required />
-            </div>
-            <Button type="submit" disabled={loading} className="w-full h-11 bg-accent hover:bg-accent/90 text-accent-foreground">
-              {loading ? "Please wait…" : isSignup ? "Create account" : "Sign in"}
+          <div className="grid grid-cols-2 gap-2 mb-6">
+            <Button
+              type="button"
+              variant={authMethod === "email" ? "default" : "outline"}
+              onClick={() => setAuthMethod("email")}
+              className="h-10 gap-2"
+            >
+              <Mail className="w-4 h-4" />
+              Email
             </Button>
-          </form>
+            <Button
+              type="button"
+              variant={authMethod === "phone" ? "default" : "outline"}
+              onClick={() => setAuthMethod("phone")}
+              className="h-10 gap-2"
+            >
+              <Phone className="w-4 h-4" />
+              Phone OTP
+            </Button>
+          </div>
+
+          {authMethod === "email" ? (
+            <form onSubmit={handleEmail} className="space-y-4">
+              {isSignup && (
+                <div>
+                  <Label htmlFor="full_name">Full name</Label>
+                  <Input id="full_name" name="full_name" placeholder="Your name" className="h-11 mt-1.5" required />
+                </div>
+              )}
+              <div>
+                <Label htmlFor="email">Email</Label>
+                <Input id="email" name="email" type="email" placeholder="you@example.com" className="h-11 mt-1.5" required />
+              </div>
+              <div>
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="password">Password</Label>
+                  {!isSignup && <span className="text-xs text-muted-foreground">Min. 6 characters</span>}
+                </div>
+                <Input id="password" name="password" type="password" placeholder="••••••••" className="h-11 mt-1.5" minLength={6} required />
+              </div>
+              <Button type="submit" disabled={loading} className="w-full h-11 bg-accent hover:bg-accent/90 text-accent-foreground">
+                {loading ? "Please wait…" : isSignup ? "Create account" : "Sign in"}
+              </Button>
+            </form>
+          ) : (
+            <div className="space-y-4">
+              {!otpSent ? (
+                <form onSubmit={handleSendOtp} className="space-y-4">
+                  <div>
+                    <Label htmlFor="phone">Phone Number (with country code, e.g. +91XXXXXXXXXX)</Label>
+                    <Input
+                      id="phone"
+                      type="tel"
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                      placeholder="+919999999999"
+                      className="h-11 mt-1.5"
+                      required
+                    />
+                  </div>
+                  <Button type="submit" disabled={loading} className="w-full h-11 bg-accent hover:bg-accent/90 text-accent-foreground">
+                    {loading ? "Sending OTP…" : "Send OTP"}
+                  </Button>
+                </form>
+              ) : (
+                <form onSubmit={handleVerifyOtp} className="space-y-4">
+                  <div>
+                    <Label htmlFor="phone-disabled">Phone Number</Label>
+                    <Input
+                      id="phone-disabled"
+                      type="tel"
+                      value={phone}
+                      disabled
+                      className="h-11 mt-1.5 bg-muted"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="otp">6-Digit OTP Code</Label>
+                    <Input
+                      id="otp"
+                      type="text"
+                      maxLength={6}
+                      value={otp}
+                      onChange={(e) => setOtp(e.target.value)}
+                      placeholder="123456"
+                      className="h-11 mt-1.5"
+                      required
+                    />
+                  </div>
+                  <Button type="submit" disabled={loading} className="w-full h-11 bg-accent hover:bg-accent/90 text-accent-foreground">
+                    {loading ? "Verifying…" : "Verify & Sign In"}
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    onClick={() => {
+                      setOtpSent(false);
+                      setOtp("");
+                    }}
+                    className="w-full h-11 text-xs"
+                  >
+                    Change Phone Number
+                  </Button>
+                </form>
+              )}
+            </div>
+          )}
 
           <p className="text-center text-sm mt-8 text-muted-foreground">
             {isSignup ? "Already have an account?" : "New to The Variety Nutrition?"}{" "}
