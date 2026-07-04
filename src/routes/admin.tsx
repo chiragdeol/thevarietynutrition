@@ -430,7 +430,7 @@ function OrdersAdmin() {
                       ) : (
                         <div className="space-y-2">
                           <p className="text-xs text-muted-foreground">Not shipped yet.</p>
-                          {o.status === "paid" && (
+                          {(o.status === "paid" || o.status === "pending") && (
                             <Button
                               size="sm"
                               type="button"
