@@ -89,9 +89,9 @@ export const shiprocketBookShipment = createServerFn({ method: "POST" })
       billing_email: order.customer_email,
       billing_phone: order.customer_phone || "9999999999",
       shipping_is_billing: true,
-      order_items: (items ?? []).map((it) => ({
+      order_items: (items ?? []).map((it, idx) => ({
         name: it.product_name,
-        sku: `PROD-${it.product_id.slice(0, 8).toUpperCase()}`,
+        sku: it.product_id ? `PROD-${it.product_id.slice(-12).toUpperCase()}` : `PROD-GEN-${idx}`,
         units: it.quantity,
         selling_price: (it.unit_price_cents / 100).toString(),
       })),

@@ -1,6 +1,6 @@
 import { l as createServerFn } from "./esm-Dova13aH.mjs";
 import { t as createServerRpc } from "./createServerRpc-WJgk8O8C.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/shiprocket.server-WXpkw1tC.js
+//#region node_modules/.nitro/vite/services/ssr/assets/shiprocket.server-Co-LvDXd.js
 var cachedToken = null;
 var tokenExpiry = null;
 async function getShiprocketToken() {
@@ -56,9 +56,9 @@ var shiprocketBookShipment = createServerFn({ method: "POST" }).inputValidator((
 		billing_email: order.customer_email,
 		billing_phone: order.customer_phone || "9999999999",
 		shipping_is_billing: true,
-		order_items: (items ?? []).map((it) => ({
+		order_items: (items ?? []).map((it, idx) => ({
 			name: it.product_name,
-			sku: `PROD-${it.product_id.slice(0, 8).toUpperCase()}`,
+			sku: it.product_id ? `PROD-${it.product_id.slice(-12).toUpperCase()}` : `PROD-GEN-${idx}`,
 			units: it.quantity,
 			selling_price: (it.unit_price_cents / 100).toString()
 		})),
