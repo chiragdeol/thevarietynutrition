@@ -115,7 +115,7 @@ function Checkout() {
           <Button type="submit" size="lg" disabled={submitting} className="w-full bg-accent hover:bg-accent/90 text-accent-foreground">
             {submitting ? "Placing order…" : `Place order · ${formatINR(total)}`}
           </Button>
-          <p className="text-xs text-muted-foreground text-center">This is a demo — no real payment is processed.</p>
+          <p className="text-xs text-muted-foreground text-center">🔒 Your information is safe and secure. Pay via UPI after placing your order.</p>
         </form>
         <div className="bg-secondary/60 rounded-xl p-6 h-fit">
           <h2 className="font-serif text-xl mb-4">Order Summary</h2>
@@ -123,7 +123,17 @@ function Checkout() {
             {items.map((i) => (
               <div key={i.id} className="flex gap-3 text-sm">
                 <div className="w-14 h-14 bg-card rounded overflow-hidden shrink-0">
-                  {i.image_url && <img src={i.image_url} alt={i.name} loading="lazy" decoding="async" className="w-full h-full object-cover" />}
+                  <img
+                    src={i.image_url || "/images/prod-placeholder.jpg"}
+                    alt={i.name}
+                    loading="lazy"
+                    decoding="async"
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      const t = e.currentTarget;
+                      if (!t.src.endsWith("/images/prod-placeholder.jpg")) t.src = "/images/prod-placeholder.jpg";
+                    }}
+                  />
                 </div>
                 <div className="flex-1">
                   <div className="font-medium">{i.name}</div>

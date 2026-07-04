@@ -141,7 +141,8 @@ function OrderSuccess() {
         <div className="bg-card border border-border rounded-xl p-6 mt-8 text-center shadow-sm">
           <h2 className="font-serif text-xl mb-2 text-primary">Pay securely via UPI (Paytm, GPay, PhonePe)</h2>
           <p className="text-sm text-muted-foreground mb-4">
-            Scan the QR code below or tap the pay button on your mobile device to pay **{formatINR(data.order.total_cents)}**.
+            Scan the QR code below or tap the pay button on your mobile device to pay{" "}
+            <strong>{formatINR(data.order.total_cents)}</strong>.
           </p>
 
           <div className="my-6">
