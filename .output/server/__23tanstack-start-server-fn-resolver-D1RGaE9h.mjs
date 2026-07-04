@@ -1,4 +1,4 @@
-//#region node_modules/.nitro/vite/services/ssr/assets/__23tanstack-start-server-fn-resolver-RoPkZeKu.js
+//#region node_modules/.nitro/vite/services/ssr/assets/__23tanstack-start-server-fn-resolver-D1RGaE9h.js
 var manifest = {
 	"02869b0edf74766f0705bdb258b8550cde65b4f2db70ec043cd97dab28282bac": {
 		functionName: "adminDeleteTestimonial_createServerFn_handler",
@@ -34,7 +34,7 @@ var manifest = {
 	},
 	"58dcdc20f334ede2954c5969ea650af049196a9970ef2af05bd74b070a8cc1c3": {
 		functionName: "shiprocketBookShipment_createServerFn_handler",
-		importer: () => import("./_ssr/shiprocket.server-CPjgOasT.mjs")
+		importer: () => import("./_ssr/shiprocket.server-DCV7HAh2.mjs")
 	},
 	"6631b829f747d4a2a680c144d4b0b717baef519568b82eb9b57baf09d459b47c": {
 		functionName: "adminDeletePost_createServerFn_handler",

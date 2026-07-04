@@ -4,8 +4,8 @@ import { u as require_react } from "../_libs/@floating-ui/react-dom+[...].mjs";
 import { t as Button } from "./button-BpE9Czok.mjs";
 import { t as Input } from "./input-NvmijQlt.mjs";
 import { t as Label } from "./label-AutfcB-T.mjs";
-import { t as Textarea } from "./textarea-Cp94w9lz.mjs";
 import { O as Leaf, S as MessageCircle, j as HeartPulse, l as Target, q as Sparkles } from "../_libs/lucide-react.mjs";
+import { t as Textarea } from "./textarea-Cp94w9lz.mjs";
 import { n as whatsappUrl, t as BRAND } from "./brand-DfYeJUSd.mjs";
 //#region node_modules/.nitro/vite/services/ssr/assets/diet-plan-D1hXgcGf.js
 var import_react = /* @__PURE__ */ __toESM(require_react());

@@ -1,13 +1,13 @@
 import { l as createServerFn } from "./esm-Dova13aH.mjs";
 import { t as createServerRpc } from "./createServerRpc-WJgk8O8C.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/shiprocket.server-CPjgOasT.js
+//#region node_modules/.nitro/vite/services/ssr/assets/shiprocket.server-DCV7HAh2.js
 var cachedToken = null;
 var tokenExpiry = null;
 async function getShiprocketToken() {
 	const now = Date.now();
 	if (cachedToken && tokenExpiry && now < tokenExpiry) return cachedToken;
-	const email = process.env.SHIPROCKET_EMAIL || "";
-	const password = process.env.SHIPROCKET_PASSWORD || "";
+	const email = process.env.SHIPROCKET_EMAIL || "api@thevarietynutrition.com";
+	const password = process.env.SHIPROCKET_PASSWORD || "#eli#yjrkdmYMeRWq86L3n*JaUk^TnYv";
 	if (!email || !password) throw new Error("Missing Shiprocket API credentials (SHIPROCKET_EMAIL / SHIPROCKET_PASSWORD)");
 	const response = await fetch("https://apiv2.shiprocket.in/v1/external/auth/login", {
 		method: "POST",

@@ -6,10 +6,10 @@ import { t as formatINR } from "./format-Br5XBkvk.mjs";
 import { N as notFound, h as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { t as useQuery } from "../_libs/tanstack__react-query.mjs";
 import { t as Input } from "./input-NvmijQlt.mjs";
-import { n as toast } from "../_libs/sonner.mjs";
 import { F as ClipboardCheck, G as ArrowRight, Y as CircleCheck, _ as QrCode, s as Truck } from "../_libs/lucide-react.mjs";
-import { n as getOrderDetails, r as submitOrderPayment, t as Route } from "./order._id-D6XXYVJ4.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/order._id-B2d3Ejz-.js
+import { n as toast } from "../_libs/sonner.mjs";
+import { n as getOrderDetails, r as submitOrderPayment, t as Route } from "./order._id-CFrVdo5D.mjs";
+//#region node_modules/.nitro/vite/services/ssr/assets/order._id-CF3ouo8O.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 function OrderSuccess() {

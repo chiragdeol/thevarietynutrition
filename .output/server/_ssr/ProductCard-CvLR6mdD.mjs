@@ -2,8 +2,8 @@ import { y as require_jsx_runtime } from "../_libs/@radix-ui/react-accordion+[..
 import { t as Button } from "./button-BpE9Czok.mjs";
 import { t as formatINR } from "./format-Br5XBkvk.mjs";
 import { h as Link } from "../_libs/@tanstack/react-router+[...].mjs";
-import { n as toast } from "../_libs/sonner.mjs";
 import { A as Heart, m as Share2 } from "../_libs/lucide-react.mjs";
+import { n as toast } from "../_libs/sonner.mjs";
 import { n as useCart } from "./cart-JVZU3Fe9.mjs";
 import { n as shareProduct, r as useWishlist } from "./wishlist-D-kkRxhE.mjs";
 //#region node_modules/.nitro/vite/services/ssr/assets/ProductCard-CvLR6mdD.js
