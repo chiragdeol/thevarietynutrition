@@ -1,6 +1,6 @@
 import { l as createServerFn } from "./esm-Dova13aH.mjs";
 import { t as createServerRpc } from "./createServerRpc-WJgk8O8C.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/shiprocket.server-Co-LvDXd.js
+//#region node_modules/.nitro/vite/services/ssr/assets/shiprocket.server-hcIdlcb6.js
 var cachedToken = null;
 var tokenExpiry = null;
 async function getShiprocketToken() {
@@ -40,12 +40,10 @@ var shiprocketBookShipment = createServerFn({ method: "POST" }).inputValidator((
 	const nameParts = order.customer_name.trim().split(/\s+/);
 	const firstName = nameParts[0] || "Customer";
 	const lastName = nameParts.slice(1).join(" ") || ".";
-	const totalWeight = .5;
-	const pickupLocation = process.env.SHIPROCKET_PICKUP_LOCATION || "Home";
 	const payload = {
 		order_id: order.order_number,
 		order_date: new Date(order.created_at).toISOString().slice(0, 16).replace("T", " "),
-		pickup_location: pickupLocation,
+		pickup_location: "Home",
 		billing_customer_name: firstName,
 		billing_last_name: lastName,
 		billing_address: order.shipping_address,
@@ -67,7 +65,7 @@ var shiprocketBookShipment = createServerFn({ method: "POST" }).inputValidator((
 		length: 15,
 		breadth: 15,
 		height: 10,
-		weight: totalWeight
+		weight: .5
 	};
 	const response = await fetch("https://apiv2.shiprocket.in/v1/external/orders/create/adhoc", {
 		method: "POST",
@@ -83,7 +81,8 @@ var shiprocketBookShipment = createServerFn({ method: "POST" }).inputValidator((
 		throw new Error(`Shiprocket API Error: ${errText}`);
 	}
 	const resData = await response.json();
-	const shiprocketOrderId = resData.order_id?.toString() || null;
+	if (!resData.order_id) throw new Error(resData.message || `Shiprocket API rejected order: ${JSON.stringify(resData)}`);
+	const shiprocketOrderId = resData.order_id.toString();
 	const shiprocketShipmentId = resData.shipment_id?.toString() || null;
 	const { error: updateErr } = await supabaseAdmin.from("orders").update({
 		shiprocket_order_id: shiprocketOrderId,

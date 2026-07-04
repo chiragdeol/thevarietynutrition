@@ -73,7 +73,7 @@ export const shiprocketBookShipment = createServerFn({ method: "POST" })
 
     // Default weight is 0.5kg (500g), or calculate roughly if weight info is available
     const totalWeight = 0.5; 
-    const pickupLocation = process.env.SHIPROCKET_PICKUP_LOCATION || "Home";
+    const pickupLocation = "Home";
 
     const payload = {
       order_id: order.order_number,
@@ -120,7 +120,10 @@ export const shiprocketBookShipment = createServerFn({ method: "POST" })
     }
 
     const resData = await response.json();
-    const shiprocketOrderId = resData.order_id?.toString() || null;
+    if (!resData.order_id) {
+      throw new Error(resData.message || `Shiprocket API rejected order: ${JSON.stringify(resData)}`);
+    }
+    const shiprocketOrderId = resData.order_id.toString();
     const shiprocketShipmentId = resData.shipment_id?.toString() || null;
 
     // 5. Save Shiprocket identifiers back to the database order

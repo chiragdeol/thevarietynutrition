@@ -1,9 +1,9 @@
 import { f as lazyRouteComponent, p as createFileRoute } from "../_libs/@tanstack/react-router+[...].mjs";
 import { l as createServerFn } from "./esm-Dova13aH.mjs";
-import { t as createSsrRpc } from "./createSsrRpc-BgsHNxH6.mjs";
+import { t as createSsrRpc } from "./createSsrRpc-236iHCnP.mjs";
 import { i as stringType, n as numberType, r as objectType, t as arrayType } from "../_libs/zod.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/checkout-ChDTHiuY.js
-var $$splitComponentImporter = () => import("./checkout-DPnJM1Kc.mjs");
+//#region node_modules/.nitro/vite/services/ssr/assets/checkout-CnSiib0D.js
+var $$splitComponentImporter = () => import("./checkout-Dq_rjMcm.mjs");
 var Route = createFileRoute("/checkout")({
 	head: () => ({ meta: [{ title: "Checkout — The Variety Nutrition" }] }),
 	component: lazyRouteComponent($$splitComponentImporter, "component")
