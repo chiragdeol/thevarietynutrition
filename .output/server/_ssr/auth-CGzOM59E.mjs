@@ -12,7 +12,7 @@ import { n as toast } from "../_libs/sonner.mjs";
 import { O as Leaf, T as Mail, b as Phone, p as ShieldCheck, q as Sparkles, s as Truck } from "../_libs/lucide-react.mjs";
 import { t as tvn_logo_png_asset_default } from "./tvn-logo.png.asset-LrE-vGw3.mjs";
 import { t as BRAND } from "./brand-DfYeJUSd.mjs";
-import { n as stringType, t as objectType } from "../_libs/zod.mjs";
+import { i as stringType, r as objectType } from "../_libs/zod.mjs";
 //#region node_modules/.nitro/vite/services/ssr/assets/auth-CGzOM59E.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();

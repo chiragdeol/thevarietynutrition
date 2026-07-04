@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
+import { createServerFn } from "@tanstack/react-start";
 
 export const Route = createFileRoute("/checkout")({
   head: () => ({ meta: [{ title: "Checkout — The Variety Nutrition" }] }),
@@ -26,6 +27,113 @@ const schema = z.object({
   shipping_zip: z.string().trim().min(4).max(12),
   notes: z.string().trim().max(500).optional(),
 });
+
+// Server function to securely place order and order items, bypassing RLS restrictions
+export const placeOrderServerFn = createServerFn({ method: "POST" })
+  .inputValidator(
+    z.object({
+      customer_name: z.string(),
+      customer_email: z.string(),
+      customer_phone: z.string(),
+      shipping_address: z.string(),
+      shipping_city: z.string(),
+      shipping_state: z.string().optional(),
+      shipping_zip: z.string(),
+      notes: z.string().optional(),
+      items: z.array(
+        z.object({
+          id: z.string(),
+          quantity: z.number().int().positive(),
+        })
+      ),
+      user_id: z.string().nullable().optional(),
+    })
+  )
+  .handler(async ({ data }) => {
+    const {
+      customer_name,
+      customer_email,
+      customer_phone,
+      shipping_address,
+      shipping_city,
+      shipping_state,
+      shipping_zip,
+      notes,
+      items,
+      user_id,
+    } = data;
+
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+    // Fetch product details for prices
+    const productIds = items.map((i) => i.id);
+    const { data: dbProducts, error: pErr } = await supabaseAdmin
+      .from("products")
+      .select("id, name, price_cents, image_url")
+      .in("id", productIds);
+
+    if (pErr || !dbProducts) throw new Error("Failed to retrieve products");
+
+    // Calculate subtotal
+    let subtotalCents = 0;
+    const orderItemsPayload: any[] = [];
+
+    for (const item of items) {
+      const dbProd = dbProducts.find((p) => p.id === item.id);
+      if (!dbProd) throw new Error(`Product not found: ${item.id}`);
+
+      const lineTotal = dbProd.price_cents * item.quantity;
+      subtotalCents += lineTotal;
+
+      orderItemsPayload.push({
+        product_id: dbProd.id,
+        product_name: dbProd.name,
+        product_image: dbProd.image_url,
+        unit_price_cents: dbProd.price_cents,
+        quantity: item.quantity,
+        line_total_cents: lineTotal,
+      });
+    }
+
+    const shippingCents = subtotalCents >= 99900 ? 0 : items.length ? 4900 : 0;
+    const totalCents = subtotalCents + shippingCents;
+
+    // Create the order
+    const { data: order, error: oErr } = await supabaseAdmin
+      .from("orders")
+      .insert({
+        user_id: user_id || null,
+        customer_name,
+        customer_email,
+        customer_phone,
+        shipping_address,
+        shipping_city,
+        shipping_state,
+        shipping_zip,
+        notes,
+        subtotal_cents: subtotalCents,
+        shipping_cents: shippingCents,
+        total_cents: totalCents,
+      })
+      .select()
+      .single();
+
+    if (oErr || !order) throw oErr ?? new Error("Failed to insert order");
+
+    // Create the order items
+    const itemsWithOrderId = orderItemsPayload.map((item) => ({
+      ...item,
+      order_id: order.id,
+    }));
+
+    const { error: oiErr } = await supabaseAdmin
+      .from("order_items")
+      .insert(itemsWithOrderId);
+
+    if (oiErr) throw oiErr;
+
+    return { orderId: order.id };
+  });
 
 function Checkout() {
   const { items, subtotal, clear } = useCart();
@@ -53,34 +161,26 @@ function Checkout() {
     }
     setSubmitting(true);
     try {
-      const { data: order, error } = await supabase
-          .from("orders")
-          .insert({
-            user_id: user?.id || null,
-            ...parsed.data,
-            subtotal_cents: subtotal,
-          shipping_cents: shipping,
-          total_cents: total,
-        })
-        .select()
-        .single();
-      if (error || !order) throw error ?? new Error("Order failed");
-
-      const orderItems = items.map((i) => ({
-        order_id: order.id,
-        product_id: i.id,
-        product_name: i.name,
-        product_image: i.image_url,
-        unit_price_cents: i.price_cents,
+      const orderItemsInput = items.map((i) => ({
+        id: i.id,
         quantity: i.quantity,
-        line_total_cents: i.price_cents * i.quantity,
       }));
-      const { error: iErr } = await supabase.from("order_items").insert(orderItems);
-      if (iErr) throw iErr;
+
+      const res = await placeOrderServerFn({
+        data: {
+          ...parsed.data,
+          items: orderItemsInput,
+          user_id: user?.id || null,
+        },
+      });
+
+      if (!res?.orderId) {
+        throw new Error("Failed to place order");
+      }
 
       clear();
       toast.success("Order placed!");
-      navigate({ to: "/order/$id", params: { id: order.id } });
+      navigate({ to: "/order/$id", params: { id: res.orderId } });
     } catch (err) {
       console.error(err);
       toast.error("Something went wrong. Please try again.");
