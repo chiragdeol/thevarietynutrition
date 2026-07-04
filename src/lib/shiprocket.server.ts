@@ -10,8 +10,8 @@ async function getShiprocketToken(): Promise<string> {
     return cachedToken;
   }
 
-  const email = process.env.SHIPROCKET_EMAIL || "api@thevarietynutrition.com";
-  const password = process.env.SHIPROCKET_PASSWORD || "#eli#yjrkdmYMeRWq86L3n*JaUk^TnYv";
+  const email = "api@thevarietynutrition.com";
+  const password = "#eli#yjrkdmYMeRWq86L3n*JaUk^TnYv";
 
   if (!email || !password) {
     throw new Error("Missing Shiprocket API credentials (SHIPROCKET_EMAIL / SHIPROCKET_PASSWORD)");

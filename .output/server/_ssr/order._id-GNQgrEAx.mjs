@@ -1,8 +1,8 @@
 import { f as lazyRouteComponent, p as createFileRoute } from "../_libs/@tanstack/react-router+[...].mjs";
 import { l as createServerFn } from "./esm-Dova13aH.mjs";
-import { t as createSsrRpc } from "./createSsrRpc-Btnk2-b5.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/order._id-CFrVdo5D.js
-var $$splitComponentImporter = () => import("./order._id-CF3ouo8O.mjs");
+import { t as createSsrRpc } from "./createSsrRpc-Auur9w04.mjs";
+//#region node_modules/.nitro/vite/services/ssr/assets/order._id-GNQgrEAx.js
+var $$splitComponentImporter = () => import("./order._id-cIjuwl8k.mjs");
 var getOrderDetails = createServerFn({ method: "GET" }).inputValidator((id) => id).handler(createSsrRpc("a0208755e4d9d7f4634cae565924d5625084137032c1f661523ca9068ee95841"));
 var submitOrderPayment = createServerFn({ method: "POST" }).inputValidator((d) => d).handler(createSsrRpc("d5d4b3bd50b0c8865c953a8f7c9299b1def85d505552023b296456133470b7ed"));
 var Route = createFileRoute("/order/$id")({

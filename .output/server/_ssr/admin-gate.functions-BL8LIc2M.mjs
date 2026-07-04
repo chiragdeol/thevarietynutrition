@@ -2,8 +2,8 @@ import { r as __toESM } from "../_runtime.mjs";
 import { u as require_react } from "../_libs/@floating-ui/react-dom+[...].mjs";
 import { D as isRedirect, L as useRouter } from "../_libs/@tanstack/react-router+[...].mjs";
 import { l as createServerFn } from "./esm-Dova13aH.mjs";
-import { t as createSsrRpc } from "./createSsrRpc-Btnk2-b5.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/admin-gate.functions-DEMpRn2D.js
+import { t as createSsrRpc } from "./createSsrRpc-Auur9w04.mjs";
+//#region node_modules/.nitro/vite/services/ssr/assets/admin-gate.functions-BL8LIc2M.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 function useServerFn(serverFn) {
 	const router = useRouter();

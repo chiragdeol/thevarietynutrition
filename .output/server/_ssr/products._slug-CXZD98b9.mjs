@@ -6,8 +6,8 @@ import { n as cn, t as Button } from "./button-BpE9Czok.mjs";
 import { t as formatINR } from "./format-Br5XBkvk.mjs";
 import { g as useNavigate, h as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { t as useQuery } from "../_libs/tanstack__react-query.mjs";
-import { A as Heart, B as Check, O as Leaf, g as RotateCcw, m as Share2, p as ShieldCheck, s as Truck, t as Zap, v as Plus, x as Minus, z as ChevronDown } from "../_libs/lucide-react.mjs";
 import { n as toast } from "../_libs/sonner.mjs";
+import { A as Heart, B as Check, O as Leaf, g as RotateCcw, m as Share2, p as ShieldCheck, s as Truck, t as Zap, v as Plus, x as Minus, z as ChevronDown } from "../_libs/lucide-react.mjs";
 import { n as useCart } from "./cart-JVZU3Fe9.mjs";
 import { t as Route } from "./products._slug-BMAE4i1Y.mjs";
 //#region node_modules/.nitro/vite/services/ssr/assets/products._slug-CXZD98b9.js
