@@ -30,6 +30,8 @@ import {
   adminOrderCount,
   adminSetMediaActive,
   adminReorderMedia,
+  adminListTempImages,
+  adminMapTempImage,
 } from "@/lib/admin-gate.functions";
 import { Button } from "@/components/ui/button";
 import { shiprocketBookShipment } from "@/lib/shiprocket.server";
@@ -88,6 +90,7 @@ function AdminPage() {
           <TabsTrigger value="testimonials">Testimonials</TabsTrigger>
           <TabsTrigger value="reels">Reels</TabsTrigger>
           <TabsTrigger value="posts">Blog Posts</TabsTrigger>
+          <TabsTrigger value="images">Map Images</TabsTrigger>
           <TabsTrigger value="settings">Settings</TabsTrigger>
         </TabsList>
         <TabsContent value="orders"><OrdersAdmin /></TabsContent>
@@ -97,6 +100,7 @@ function AdminPage() {
         <TabsContent value="testimonials"><TestimonialsAdmin /></TabsContent>
         <TabsContent value="reels"><ReelsAdmin /></TabsContent>
         <TabsContent value="posts"><PostsAdmin /></TabsContent>
+        <TabsContent value="images"><ImageMapperAdmin /></TabsContent>
         <TabsContent value="settings"><NotificationSettings /></TabsContent>
       </Tabs>
     </div>
@@ -946,7 +950,7 @@ function ReelsAdmin() {
         <div key={r.id} className="bg-card border border-border rounded-xl p-4">
           <div className="flex justify-between items-center gap-3 flex-wrap">
             <div className="flex items-center gap-3 min-w-0">
-              <video src={r.video_url} muted playsInline className="w-14 h-20 rounded object-cover bg-black shrink-0" />
+              <video src={r.video_url} disabled muted playsInline className="w-14 h-20 rounded object-cover bg-black shrink-0" />
               <div className="min-w-0">
                 <div className="font-medium truncate flex items-center gap-2">
                   {r.title}
@@ -967,3 +971,119 @@ function ReelsAdmin() {
     </div>
   );
 }
+
+function ImageMapperAdmin() {
+  const qc = useQueryClient();
+  const listTemp = useServerFn(adminListTempImages);
+  const listProducts = useServerFn(adminListProducts);
+  const mapImage = useServerFn(adminMapTempImage);
+
+  const { data: tempImages, refetch: refetchTemp, isLoading: loadingTemp } = useQuery({
+    queryKey: ["temp-images"],
+    queryFn: () => listTemp({}),
+  });
+
+  const { data: products } = useQuery({
+    queryKey: ["adm-products"],
+    queryFn: () => listProducts({}),
+  });
+
+  const [selectedProducts, setSelectedProducts] = useState<Record<string, string>>({});
+  const [mappingId, setMappingId] = useState<string | null>(null);
+
+  async function handleMap(filename: string) {
+    const productId = selectedProducts[filename];
+    if (!productId) {
+      toast.error("Please select a product first");
+      return;
+    }
+
+    setMappingId(filename);
+    try {
+      const res = await mapImage({ data: { filename, productId } });
+      toast.success(`Mapped successfully!`);
+      qc.invalidateQueries({ queryKey: ["temp-images"] });
+      qc.invalidateQueries({ queryKey: ["adm-products"] });
+      setSelectedProducts((prev) => {
+        const next = { ...prev };
+        delete next[filename];
+        return next;
+      });
+    } catch (e: any) {
+      toast.error(e.message || "Failed to map image");
+    } finally {
+      setMappingId(null);
+    }
+  }
+
+  return (
+    <div className="mt-6 space-y-4">
+      <div className="bg-secondary/35 p-4 rounded-xl text-sm leading-relaxed border border-border">
+        <h3 className="font-semibold text-foreground mb-1">📦 Uploaded Product Images Mapper</h3>
+        <p className="text-muted-foreground text-xs">
+          Select which product each new pack image belongs to. Mapping will copy the image to the correct product slug name, update the product's image url in the database, and clear it from this mapping screen.
+        </p>
+      </div>
+
+      {loadingTemp && <div className="text-sm text-muted-foreground">Loading images…</div>}
+
+      {!tempImages?.length && !loadingTemp && (
+        <div className="text-sm text-muted-foreground bg-card border border-border rounded-xl p-8 text-center">
+          All images have been mapped! No new temp uploads found.
+        </div>
+      )}
+
+      {tempImages && tempImages.length > 0 && (
+        <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {tempImages.map((filename: string) => {
+            const currentSelection = selectedProducts[filename] || "";
+            return (
+              <div key={filename} className="bg-card border border-border rounded-xl p-4 flex flex-col justify-between shadow-sm">
+                <div className="space-y-3">
+                  <div className="aspect-square w-full relative bg-secondary/20 rounded-lg overflow-hidden border border-border/50 flex items-center justify-center">
+                    <img
+                      src={`/images/temp_uploads/${filename}`}
+                      alt={filename}
+                      className="max-w-full max-h-full object-contain p-2"
+                    />
+                  </div>
+                  <div className="text-xs font-mono text-muted-foreground truncate" title={filename}>
+                    {filename}
+                  </div>
+                </div>
+
+                <div className="mt-4 space-y-2">
+                  <Select
+                    value={currentSelection}
+                    onValueChange={(val) => setSelectedProducts((prev) => ({ ...prev, [filename]: val }))}
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Select product..." />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {products?.map((p: any) => (
+                        <SelectItem key={p.id} value={p.id}>
+                          {p.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+
+                  <Button
+                    onClick={() => handleMap(filename)}
+                    disabled={mappingId === filename || !currentSelection}
+                    className="w-full bg-accent hover:bg-accent/90 text-accent-foreground text-xs"
+                    size="sm"
+                  >
+                    {mappingId === filename ? "Saving..." : "Map to Product"}
+                  </Button>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
+

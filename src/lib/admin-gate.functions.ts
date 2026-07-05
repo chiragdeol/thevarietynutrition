@@ -329,3 +329,72 @@ export const adminOrderCount = createServerFn({ method: "GET" }).handler(async (
   if (error) throw new Error(error.message);
   return { count: count ?? 0 };
 });
+
+// LIST TEMP IMAGES
+export const adminListTempImages = createServerFn({ method: "GET" }).handler(async () => {
+  await requireAdmin();
+  const fs = await import("fs");
+  const path = await import("path");
+  const dirPath = path.join(process.cwd(), "public/images/temp_uploads");
+  if (!fs.existsSync(dirPath)) {
+    return [];
+  }
+  const files = fs.readdirSync(dirPath);
+  return files.filter((f) => /\.(png|jpg|jpeg)$/i.test(f));
+});
+
+// MAP TEMP IMAGE
+export const adminMapTempImage = createServerFn({ method: "POST" })
+  .inputValidator((d: { filename: string; productId: string }) => d)
+  .handler(async ({ data }) => {
+    await requireAdmin();
+    const fs = await import("fs");
+    const path = await import("path");
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    
+    const { data: product, error: pErr } = await supabaseAdmin
+      .from("products")
+      .select("slug")
+      .eq("id", data.productId)
+      .single();
+      
+    if (pErr || !product) {
+      throw new Error("Product not found");
+    }
+    
+    const ext = path.extname(data.filename) || ".png";
+    const newFilename = `${product.slug}${ext}`;
+    
+    const srcPath = path.join(process.cwd(), "public/images/temp_uploads", data.filename);
+    const destDir = path.join(process.cwd(), "public/images/products");
+    const destPath = path.join(destDir, newFilename);
+    
+    if (!fs.existsSync(srcPath)) {
+      throw new Error("Source image not found");
+    }
+    
+    if (!fs.existsSync(destDir)) {
+      fs.mkdirSync(destDir, { recursive: true });
+    }
+    
+    fs.copyFileSync(srcPath, destPath);
+    
+    const dbUrl = `/images/products/${newFilename}`;
+    const { error: uErr } = await supabaseAdmin
+      .from("products")
+      .update({ image_url: dbUrl })
+      .eq("id", data.productId);
+      
+    if (uErr) {
+      throw new Error(`Database Update Error: ${uErr.message}`);
+    }
+    
+    try {
+      fs.unlinkSync(srcPath);
+    } catch (e) {
+      console.error("Failed to delete temp file:", e);
+    }
+    
+    return { success: true, url: dbUrl };
+  });
+
