@@ -140,7 +140,12 @@ export function GoogleReviews() {
           </div>
 
           <div className="flex items-center gap-4">
-            <div className="bg-card border border-border px-4 py-2.5 rounded-xl flex items-center gap-3 shadow-sm">
+            <a
+              href="https://www.google.com/search?q=thevarietynutrition"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-card border border-border px-4 py-2.5 rounded-xl flex items-center gap-3 shadow-sm hover:shadow hover:border-accent/40 transition-all cursor-pointer"
+            >
               <span className="font-bold text-lg text-primary">4.9</span>
               <div className="flex flex-col">
                 <div className="flex text-amber-500">
@@ -150,10 +155,10 @@ export function GoogleReviews() {
                 </div>
                 <span className="text-[10px] text-muted-foreground font-medium">Based on 500+ reviews</span>
               </div>
-            </div>
+            </a>
 
             <a
-              href="https://g.page/r/your-google-business-profile-link/review"
+              href="https://www.google.com/search?q=thevarietynutrition"
               target="_blank"
               rel="noopener noreferrer"
               className="bg-primary text-primary-foreground font-semibold text-xs px-5 py-3 rounded-full hover:bg-primary/95 transition-all shadow-md"
