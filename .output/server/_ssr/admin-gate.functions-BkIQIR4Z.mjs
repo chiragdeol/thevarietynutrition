@@ -1,8 +1,10 @@
 import { l as createServerFn } from "./esm-Dova13aH.mjs";
 import { r as useSession$1 } from "./request-response-Bv1MIUlU.mjs";
 import { t as createServerRpc } from "./createServerRpc-WJgk8O8C.mjs";
+import { Buffer } from "node:buffer";
+import process from "node:process";
 import { createHash, timingSafeEqual } from "node:crypto";
-//#region node_modules/.nitro/vite/services/ssr/assets/admin-gate.functions-DDKt6NWb.js
+//#region node_modules/.nitro/vite/services/ssr/assets/admin-gate.functions-BkIQIR4Z.js
 function sessionConfig() {
 	return {
 		password: process.env.ADMIN_SESSION_SECRET || "d3b07384d113edec49eaa6238ad5ffd2cd0709d18b1c255e39660ff238c30c0f",
@@ -354,8 +356,8 @@ var adminListTempImages_createServerFn_handler = createServerRpc({
 }, (opts) => adminListTempImages.__executeServer(opts));
 var adminListTempImages = createServerFn({ method: "GET" }).handler(adminListTempImages_createServerFn_handler, async () => {
 	await requireAdmin();
-	const fs = await import("fs");
-	const dirPath = (await import("path")).join(process.cwd(), "public/images/temp_uploads");
+	const fs = await import("node:fs");
+	const dirPath = (await import("node:path")).join(process.cwd(), "public/images/temp_uploads");
 	if (!fs.existsSync(dirPath)) return [];
 	return fs.readdirSync(dirPath).filter((f) => /\.(png|jpg|jpeg)$/i.test(f));
 });
@@ -366,8 +368,8 @@ var adminMapTempImage_createServerFn_handler = createServerRpc({
 }, (opts) => adminMapTempImage.__executeServer(opts));
 var adminMapTempImage = createServerFn({ method: "POST" }).inputValidator((d) => d).handler(adminMapTempImage_createServerFn_handler, async ({ data }) => {
 	await requireAdmin();
-	const fs = await import("fs");
-	const path = await import("path");
+	const fs = await import("node:fs");
+	const path = await import("node:path");
 	const { supabaseAdmin } = await import("./client.server-CRe3Mxtu.mjs");
 	const { data: product, error: pErr } = await supabaseAdmin.from("products").select("slug").eq("id", data.productId).single();
 	if (pErr || !product) throw new Error("Product not found");

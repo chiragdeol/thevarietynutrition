@@ -1,4 +1,5 @@
 import { t as createClient } from "../_libs/supabase__supabase-js.mjs";
+import process from "node:process";
 //#region node_modules/.nitro/vite/services/ssr/assets/client.server-CRe3Mxtu.js
 function isNewSupabaseApiKey(value) {
 	return value.startsWith("sb_publishable_") || value.startsWith("sb_secret_");

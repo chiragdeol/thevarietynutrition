@@ -1,4 +1,4 @@
-import { __awaiter } from "tslib";
+import { h as __awaiter } from "./@radix-ui/react-select+[...].mjs";
 //#region node_modules/@supabase/functions-js/dist/module/helper.js
 var resolveFetch = (customFetch) => {
 	if (customFetch) return (...args) => customFetch(...args);

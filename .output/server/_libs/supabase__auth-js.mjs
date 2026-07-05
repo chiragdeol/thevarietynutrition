@@ -1,4 +1,4 @@
-import { __rest } from "tslib";
+import { g as __rest } from "./@radix-ui/react-select+[...].mjs";
 //#region node_modules/@supabase/auth-js/dist/module/lib/version.js
 var version = "2.110.0";
 //#endregion

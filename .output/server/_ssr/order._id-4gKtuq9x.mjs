@@ -1,4 +1,4 @@
-import { r as __toESM } from "../_runtime.mjs";
+import { n as __toESM } from "../_runtime.mjs";
 import { y as require_jsx_runtime } from "../_libs/@radix-ui/react-accordion+[...].mjs";
 import { u as require_react } from "../_libs/@floating-ui/react-dom+[...].mjs";
 import { t as Button } from "./button-BpE9Czok.mjs";
@@ -8,8 +8,8 @@ import { t as useQuery } from "../_libs/tanstack__react-query.mjs";
 import { t as Input } from "./input-NvmijQlt.mjs";
 import { n as toast } from "../_libs/sonner.mjs";
 import { F as ClipboardCheck, G as ArrowRight, Y as CircleCheck, _ as QrCode, s as Truck } from "../_libs/lucide-react.mjs";
-import { n as getOrderDetails, r as submitOrderPayment, t as Route } from "./order._id-D1Z0InBL.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/order._id-BClQlh-S.js
+import { n as getOrderDetails, r as submitOrderPayment, t as Route } from "./order._id-DIvRIRBU.mjs";
+//#region node_modules/.nitro/vite/services/ssr/assets/order._id-4gKtuq9x.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 function OrderSuccess() {

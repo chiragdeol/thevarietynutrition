@@ -1,4 +1,4 @@
-import { r as __toESM } from "../_runtime.mjs";
+import { n as __toESM } from "../_runtime.mjs";
 import { t as hero_nuts_png_asset_default } from "./hero-nuts.png.asset-BBg8lKzL.mjs";
 import { y as require_jsx_runtime } from "../_libs/@radix-ui/react-accordion+[...].mjs";
 import { t as createClient } from "../_libs/supabase__supabase-js.mjs";
@@ -16,11 +16,12 @@ import { n as whatsappUrl } from "./brand-DfYeJUSd.mjs";
 import { n as useCart, t as CartProvider } from "./cart-JVZU3Fe9.mjs";
 import { r as useWishlist, t as WishlistProvider } from "./wishlist-D-kkRxhE.mjs";
 import { t as Route$16 } from "./category._slug-oCo1yzzv.mjs";
-import { t as Route$17 } from "./checkout-g-BJBDfl.mjs";
-import { t as Route$18 } from "./order._id-D1Z0InBL.mjs";
+import { t as Route$17 } from "./checkout-DVOPvm2X.mjs";
+import { t as Route$18 } from "./order._id-DIvRIRBU.mjs";
 import { t as Route$19 } from "./products._slug-BMAE4i1Y.mjs";
 import { t as Route$20 } from "./recipes._slug-DIiM-xxA.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-6yZNYV1D.js
+import process from "node:process";
+//#region node_modules/.nitro/vite/services/ssr/assets/router-Cd3phMJB.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var styles_default = "/assets/styles-CO3fE850.css";
@@ -728,7 +729,7 @@ var Route$7 = createFileRoute("/auth")({
 	head: () => ({ meta: [{ title: "Sign in — The Variety Nutrition" }] }),
 	component: lazyRouteComponent($$splitComponentImporter$7, "component")
 });
-var $$splitComponentImporter$6 = () => import("./admin-login-CYGQT2NP.mjs");
+var $$splitComponentImporter$6 = () => import("./admin-login-CooJRxgB.mjs");
 var Route$6 = createFileRoute("/admin-login")({
 	ssr: false,
 	head: () => ({ meta: [{ title: "Admin Login — The Variety Nutrition" }, {
@@ -737,7 +738,7 @@ var Route$6 = createFileRoute("/admin-login")({
 	}] }),
 	component: lazyRouteComponent($$splitComponentImporter$6, "component")
 });
-var $$splitComponentImporter$5 = () => import("./admin-CptB8CX2.mjs");
+var $$splitComponentImporter$5 = () => import("./admin-DK3xlcV2.mjs");
 var Route$5 = createFileRoute("/admin")({
 	ssr: false,
 	head: () => ({ meta: [{ title: "Admin — The Variety Nutrition" }, {

@@ -34,3 +34,7 @@ dist-ssr
 # Environment variables
 .env
 .env.local
+
+# Scratch directory
+scratch/
+
