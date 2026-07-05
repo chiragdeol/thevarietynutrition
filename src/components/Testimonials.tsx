@@ -13,6 +13,12 @@ type VideoReview = {
   accent: string | null;
 };
 
+function getInstagramShortcode(url: string): string | null {
+  if (!url) return null;
+  const match = url.match(/(?:instagram\.com\/(?:p|reel|tv)\/)([a-zA-Z0-9_-]+)/);
+  return match ? match[1] : null;
+}
+
 function ReviewCard({ review }: { review: VideoReview }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [muted, setMuted] = useState(true);
@@ -42,6 +48,21 @@ function ReviewCard({ review }: { review: VideoReview }) {
     if (v.paused) { v.play(); setPlaying(true); }
     else { v.pause(); setPlaying(false); }
   };
+
+  const shortcode = getInstagramShortcode(review.video_url);
+
+  if (shortcode) {
+    return (
+      <figure className="group relative aspect-[9/16] w-[260px] sm:w-[300px] shrink-0 overflow-hidden rounded-3xl bg-black shadow-2xl ring-1 ring-border/40">
+        <iframe
+          src={`https://www.instagram.com/reel/${shortcode}/embed`}
+          className="w-full h-full border-0"
+          scrolling="no"
+          allowFullScreen
+        />
+      </figure>
+    );
+  }
 
   return (
     <figure className="group relative aspect-[9/16] w-[260px] sm:w-[300px] shrink-0 overflow-hidden rounded-3xl bg-black shadow-2xl ring-1 ring-border/40">

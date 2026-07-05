@@ -1,1 +1,0 @@
-import{t as e}from"./jsx-runtime-DGeXAQPT.js";import{I as t}from"./index-Ny3L0jK1.js";var n=e(),r=()=>(0,n.jsx)(t,{});export{r as component};

@@ -559,60 +559,69 @@ function ProductsAdmin() {
   const save = useServerFn(adminSaveProduct);
   const del = useServerFn(adminDeleteProduct);
   const [editing, setEditing] = useState<string | null>(null);
+  const [addOpen, setAddOpen] = useState(false);
   const { data } = useQuery({ queryKey: ["adm-prods"], queryFn: () => list({}) });
   const { data: cats } = useQuery({ queryKey: ["adm-cats"], queryFn: () => listCats({}) });
 
-  async function submit(e: React.FormEvent<HTMLFormElement>, id?: string) {
-    e.preventDefault();
-    const fd = Object.fromEntries(new FormData(e.currentTarget)) as Record<string, string>;
-    const payload = {
-      slug: fd.slug, name: fd.name,
-      short_description: fd.short_description || null,
-      description: fd.description || null,
-      price_cents: Math.round(parseFloat(fd.price || "0") * 100),
-      compare_at_price_cents: fd.compare_at ? Math.round(parseFloat(fd.compare_at) * 100) : null,
-      category_id: fd.category_id || null,
-      stock: parseInt(fd.stock || "0", 10),
-      image_url: fd.image_url || null,
-      active: fd.active === "on",
-      featured: fd.featured === "on",
-    };
-    try { await save({ data: { id, payload } }); toast.success("Saved"); setEditing(null); qc.invalidateQueries({ queryKey: ["adm-prods"] }); }
-    catch (err: any) { toast.error(err.message); }
-  }
   async function remove(id: string) {
     if (!confirm("Delete this product?")) return;
     try { await del({ data: { id } }); toast.success("Deleted"); qc.invalidateQueries({ queryKey: ["adm-prods"] }); }
     catch (err: any) { toast.error(err.message); }
   }
-  const Form = ({ p, id }: { p?: any; id?: string }) => (
-    <form onSubmit={(e) => submit(e, id)} className="grid sm:grid-cols-2 gap-3 bg-secondary/60 rounded-lg p-4">
-      <Input name="name" placeholder="Name" defaultValue={p?.name ?? ""} required />
-      <Input name="slug" placeholder="slug" defaultValue={p?.slug ?? ""} required />
-      <Input name="short_description" placeholder="Short description" defaultValue={p?.short_description ?? ""} />
-      <Input name="image_url" placeholder="Image URL" defaultValue={p?.image_url ?? ""} />
-      <Input name="price" type="number" step="0.01" placeholder="Price (₹)" defaultValue={p?.price_cents ? p.price_cents / 100 : ""} required />
-      <Input name="compare_at" type="number" step="0.01" placeholder="Compare at (₹)" defaultValue={p?.compare_at_price_cents ? p.compare_at_price_cents / 100 : ""} />
-      <Input name="stock" type="number" placeholder="Stock" defaultValue={p?.stock ?? 0} required />
-      <select name="category_id" defaultValue={p?.category_id ?? ""} className="rounded-md border border-input bg-background px-3 py-2 text-sm">
-        <option value="">— No category —</option>
-        {cats?.map((c: any) => <option key={c.id} value={c.id}>{c.name}</option>)}
-      </select>
-      <Textarea name="description" placeholder="Long description" defaultValue={p?.description ?? ""} className="sm:col-span-2" rows={3} />
-      <label className="flex items-center gap-2 text-sm"><input type="checkbox" name="active" defaultChecked={p ? p.active : true} /> Active</label>
-      <label className="flex items-center gap-2 text-sm"><input type="checkbox" name="featured" defaultChecked={p?.featured ?? false} /> Featured</label>
-      <div className="sm:col-span-2 flex gap-2">
-        <Button type="submit" className="bg-accent text-accent-foreground">Save</Button>
-        {id && <Button type="button" variant="outline" onClick={() => setEditing(null)}>Cancel</Button>}
-      </div>
-    </form>
-  );
+
+  function ProductForm({ p, id, onDone }: { p?: any; id?: string; onDone: () => void }) {
+    const [imageUrl, setImageUrl] = useState(p?.image_url ?? "");
+    async function submit(e: React.FormEvent<HTMLFormElement>) {
+      e.preventDefault();
+      const fd = Object.fromEntries(new FormData(e.currentTarget)) as Record<string, string>;
+      const payload = {
+        slug: fd.slug, name: fd.name,
+        short_description: fd.short_description || null,
+        description: fd.description || null,
+        price_cents: Math.round(parseFloat(fd.price || "0") * 100),
+        compare_at_price_cents: fd.compare_at ? Math.round(parseFloat(fd.compare_at) * 100) : null,
+        category_id: fd.category_id || null,
+        stock: parseInt(fd.stock || "0", 10),
+        image_url: imageUrl || null,
+        active: fd.active === "on",
+        featured: fd.featured === "on",
+      };
+      try { await save({ data: { id, payload } }); toast.success("Saved"); onDone(); qc.invalidateQueries({ queryKey: ["adm-prods"] }); }
+      catch (err: any) { toast.error(err.message); }
+    }
+    return (
+      <form onSubmit={submit} className="grid sm:grid-cols-2 gap-3 bg-secondary/60 rounded-lg p-4">
+        <Input name="name" placeholder="Name" defaultValue={p?.name ?? ""} required />
+        <Input name="slug" placeholder="slug" defaultValue={p?.slug ?? ""} required />
+        <Input name="short_description" placeholder="Short description" defaultValue={p?.short_description ?? ""} />
+        <div className="sm:col-span-2">
+          <Label>Product Image (upload or URL)</Label>
+          <MediaUploadField value={imageUrl} onChange={setImageUrl} accept="image/*" />
+        </div>
+        <Input name="price" type="number" step="0.01" placeholder="Price (₹)" defaultValue={p?.price_cents ? p.price_cents / 100 : ""} required />
+        <Input name="compare_at" type="number" step="0.01" placeholder="Compare at (₹)" defaultValue={p?.compare_at_price_cents ? p.compare_at_price_cents / 100 : ""} />
+        <Input name="stock" type="number" placeholder="Stock" defaultValue={p?.stock ?? 0} required />
+        <select name="category_id" defaultValue={p?.category_id ?? ""} className="rounded-md border border-input bg-background px-3 py-2 text-sm">
+          <option value="">— No category —</option>
+          {cats?.map((c: any) => <option key={c.id} value={c.id}>{c.name}</option>)}
+        </select>
+        <Textarea name="description" placeholder="Long description" defaultValue={p?.description ?? ""} className="sm:col-span-2" rows={3} />
+        <label className="flex items-center gap-2 text-sm"><input type="checkbox" name="active" defaultChecked={p ? p.active : true} /> Active</label>
+        <label className="flex items-center gap-2 text-sm"><input type="checkbox" name="featured" defaultChecked={p?.featured ?? false} /> Featured</label>
+        <div className="sm:col-span-2 flex gap-2">
+          <Button type="submit" className="bg-accent text-accent-foreground">Save</Button>
+          {id && <Button type="button" variant="outline" onClick={onDone}>Cancel</Button>}
+        </div>
+      </form>
+    );
+  }
+
   return (
     <div className="mt-6 space-y-4">
-      <details className="bg-card border border-border rounded-xl p-4">
-        <summary className="cursor-pointer font-semibold">+ Add new product</summary>
-        <div className="mt-4"><Form /></div>
-      </details>
+      <div className="bg-card border border-border rounded-xl p-4">
+        <button onClick={() => setAddOpen((o) => !o)} className="font-semibold text-left w-full">{addOpen ? "− Close" : "+ Add new product"}</button>
+        {addOpen && <div className="mt-4"><ProductForm onDone={() => setAddOpen(false)} /></div>}
+      </div>
       {data?.map((p: any) => (
         <div key={p.id} className="bg-card border border-border rounded-xl p-4">
           <div className="flex justify-between items-center gap-3">
@@ -628,7 +637,7 @@ function ProductsAdmin() {
               <Button size="sm" variant="outline" onClick={() => remove(p.id)}>Delete</Button>
             </div>
           </div>
-          {editing === p.id && <div className="mt-4"><Form p={p} id={p.id} /></div>}
+          {editing === p.id && <div className="mt-4"><ProductForm p={p} id={p.id} onDone={() => setEditing(null)} /></div>}
         </div>
       ))}
     </div>

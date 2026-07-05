@@ -6,6 +6,12 @@ import { BRAND } from "@/lib/brand";
 
 type Reel = { id: string; video_url: string; title: string; caption: string | null };
 
+function getInstagramShortcode(url: string): string | null {
+  if (!url) return null;
+  const match = url.match(/(?:instagram\.com\/(?:p|reel|tv)\/)([a-zA-Z0-9_-]+)/);
+  return match ? match[1] : null;
+}
+
 function ReelCard({ reel }: { reel: Reel }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [muted, setMuted] = useState(true);
@@ -24,6 +30,21 @@ function ReelCard({ reel }: { reel: Reel }) {
     io.observe(v);
     return () => io.disconnect();
   }, []);
+
+  const shortcode = getInstagramShortcode(reel.video_url);
+
+  if (shortcode) {
+    return (
+      <div className="group relative aspect-[9/16] w-[260px] sm:w-[300px] shrink-0 overflow-hidden rounded-3xl bg-black shadow-2xl ring-1 ring-border/40">
+        <iframe
+          src={`https://www.instagram.com/reel/${shortcode}/embed`}
+          className="w-full h-full border-0"
+          scrolling="no"
+          allowFullScreen
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="group relative aspect-[9/16] w-[260px] sm:w-[300px] shrink-0 overflow-hidden rounded-3xl bg-black shadow-2xl ring-1 ring-border/40">

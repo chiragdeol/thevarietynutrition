@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Leaf, Truck, ShieldCheck, Award, ChevronLeft, ChevronRight } from "lucide-react";
 import heroImg from "@/assets/hero-nuts.png.asset.json";
 import { Testimonials } from "@/components/Testimonials";
+import { GoogleReviews } from "@/components/GoogleReviews";
 import { InstagramReels } from "@/components/InstagramReels";
 import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
@@ -276,6 +277,9 @@ function Home() {
 
       {/* TESTIMONIALS */}
       <Testimonials />
+
+      {/* GOOGLE REVIEWS */}
+      <GoogleReviews />
 
       {/* INSTAGRAM */}
       <InstagramReels />
