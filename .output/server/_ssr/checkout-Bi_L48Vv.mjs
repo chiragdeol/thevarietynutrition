@@ -11,8 +11,8 @@ import { t as Textarea } from "./textarea-Cp94w9lz.mjs";
 import { n as toast } from "../_libs/sonner.mjs";
 import { i as stringType, r as objectType } from "../_libs/zod.mjs";
 import { n as useCart } from "./cart-JVZU3Fe9.mjs";
-import { n as placeOrderServerFn } from "./checkout-Z-VcywdF.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/checkout-Cy1jdMrc.js
+import { n as placeOrderServerFn } from "./checkout-BrJ2UbSz.mjs";
+//#region node_modules/.nitro/vite/services/ssr/assets/checkout-Bi_L48Vv.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var schema = objectType({
