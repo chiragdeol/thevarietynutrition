@@ -1,7 +1,7 @@
 import nodemailer from "nodemailer";
 
 const smtpHost = process.env.SMTP_HOST || "smtp.hostinger.com";
-const smtpPort = parseInt(process.env.SMTP_PORT || "465", 10);
+const smtpPort = parseInt(process.env.SMTP_PORT || "587", 10);
 export const smtpUser = process.env.SMTP_USER || "customer@thevarietynutrition.com";
 const smtpPass = process.env.SMTP_PASS || "#eli#yjrkdmYMeRWq86L3n*JaUk^TnYv";
 
@@ -9,11 +9,14 @@ const smtpPass = process.env.SMTP_PASS || "#eli#yjrkdmYMeRWq86L3n*JaUk^TnYv";
 export const transporter = nodemailer.createTransport({
   host: smtpHost,
   port: smtpPort,
-  secure: smtpPort === 465, // true for 465, false for other ports
+  secure: smtpPort === 465, // true for 465, false for 587/other ports
   auth: {
     user: smtpUser,
     pass: smtpPass,
   },
+  tls: {
+    rejectUnauthorized: false // Prevents Hostinger SSL certificate validation errors
+  }
 });
 
 // Helper to format currency
