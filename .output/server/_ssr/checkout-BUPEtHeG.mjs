@@ -1,8 +1,8 @@
 import { l as createServerFn } from "./esm-Dova13aH.mjs";
 import { t as createServerRpc } from "./createServerRpc-WJgk8O8C.mjs";
 import { i as stringType, n as numberType, r as objectType, t as arrayType } from "../_libs/zod.mjs";
-import { sendOrderPlacedNotification } from "./notifications.server-C8ALsqAK.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/checkout-7T5TGsOb.js
+import { sendOrderPlacedNotification } from "./notifications.server-DgUQPcvV.mjs";
+//#region node_modules/.nitro/vite/services/ssr/assets/checkout-BUPEtHeG.js
 var placeOrderServerFn_createServerFn_handler = createServerRpc({
 	id: "3470d08d3a48857491dd209252495b39df79ed9208c1a8e0096cbe9c6e295392",
 	name: "placeOrderServerFn",

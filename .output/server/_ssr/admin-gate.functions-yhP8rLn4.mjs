@@ -4,7 +4,7 @@ import { t as createServerRpc } from "./createServerRpc-WJgk8O8C.mjs";
 import { Buffer } from "node:buffer";
 import process from "node:process";
 import { createHash, timingSafeEqual } from "node:crypto";
-//#region node_modules/.nitro/vite/services/ssr/assets/admin-gate.functions-DcQEoxLK.js
+//#region node_modules/.nitro/vite/services/ssr/assets/admin-gate.functions-yhP8rLn4.js
 function sessionConfig() {
 	return {
 		password: process.env.ADMIN_SESSION_SECRET || "d3b07384d113edec49eaa6238ad5ffd2cd0709d18b1c255e39660ff238c30c0f",
@@ -92,7 +92,7 @@ var adminUpdateOrderStatus = createServerFn({ method: "POST" }).inputValidator((
 	const { error } = await (await admin()).from("orders").update({ status: data.status }).eq("id", data.id);
 	if (error) throw new Error(error.message);
 	if (data.status === "paid") {
-		const { sendOrderPaidNotification } = await import("./notifications.server-C8ALsqAK.mjs");
+		const { sendOrderPaidNotification } = await import("./notifications.server-DgUQPcvV.mjs");
 		sendOrderPaidNotification(data.id).catch((err) => {
 			console.error("Failed to send payment confirmation notification:", err);
 		});
@@ -407,7 +407,7 @@ var adminTestSMTPSend_createServerFn_handler = createServerRpc({
 }, (opts) => adminTestSMTPSend.__executeServer(opts));
 var adminTestSMTPSend = createServerFn({ method: "POST" }).handler(adminTestSMTPSend_createServerFn_handler, async () => {
 	try {
-		const { transporter, smtpUser } = await import("./notifications.server-C8ALsqAK.mjs");
+		const { transporter, smtpUser } = await import("./notifications.server-DgUQPcvV.mjs");
 		const host = (process.env.CUSTOMER_SMTP_HOST || "smtp.hostinger.com").trim();
 		const port = (process.env.CUSTOMER_SMTP_PORT || "465").trim();
 		const envPass = process.env.CUSTOMER_SMTP_PASS;
