@@ -204,6 +204,233 @@ function playAlarm() {
   } catch {}
 }
 
+function printInvoice(order: any, items: any[]) {
+  const printWindow = window.open("", "_blank");
+  if (!printWindow) return;
+
+  const itemsHtml = items.map(it => `
+    <tr>
+      <td style="padding: 10px; border-bottom: 1px solid #eee;">${it.product_name}</td>
+      <td style="padding: 10px; border-bottom: 1px solid #eee; text-align: center;">${it.quantity}</td>
+      <td style="padding: 10px; border-bottom: 1px solid #eee; text-align: right;">₹${(it.unit_price_cents / 100).toFixed(2)}</td>
+      <td style="padding: 10px; border-bottom: 1px solid #eee; text-align: right;">₹${(it.line_total_cents / 100).toFixed(2)}</td>
+    </tr>
+  `).join("");
+
+  const html = `
+    <html>
+      <head>
+        <title>Invoice - ${order.order_number}</title>
+        <style>
+          body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #333; margin: 0; padding: 40px; }
+          .header { display: flex; justify-content: space-between; border-bottom: 2px solid #111; padding-bottom: 20px; margin-bottom: 30px; }
+          .logo { font-size: 24px; font-weight: bold; }
+          .invoice-title { font-size: 28px; text-transform: uppercase; letter-spacing: 1px; }
+          .details { display: flex; justify-content: space-between; margin-bottom: 30px; }
+          .details-box { width: 45%; }
+          .details-box h3 { margin-top: 0; border-bottom: 1px solid #ddd; padding-bottom: 5px; font-size: 14px; text-transform: uppercase; color: #666; }
+          table { width: 100%; border-collapse: collapse; margin-bottom: 30px; }
+          th { background: #f9f9f9; padding: 12px 10px; border-bottom: 2px solid #eee; text-transform: uppercase; font-size: 12px; font-weight: bold; }
+          .totals { text-align: right; font-size: 14px; }
+          .totals p { margin: 5px 0; }
+          .totals .grand-total { font-size: 18px; font-weight: bold; margin-top: 10px; border-top: 2px solid #111; padding-top: 10px; }
+          .footer { text-align: center; font-size: 12px; color: #888; margin-top: 50px; border-top: 1px solid #eee; padding-top: 20px; }
+          @media print {
+            body { padding: 0; }
+            button { display: none; }
+          }
+        </style>
+      </head>
+      <body>
+        <div class="header">
+          <div>
+            <div class="logo">The Variety Nutrition</div>
+            <p style="font-size: 12px; margin: 5px 0 0 0; color: #666;">Pegasus Tower, Noida, UP 201307<br>Phone: +91 99710 95414<br>Email: customer@thevarietynutrition.com</p>
+          </div>
+          <div style="text-align: right;">
+            <div class="invoice-title">Invoice</div>
+            <p style="margin: 5px 0 0 0;"><strong>Order #:</strong> ${order.order_number}</p>
+            <p style="margin: 2px 0 0 0;"><strong>Date:</strong> ${new Date(order.created_at).toLocaleDateString()}</p>
+            <p style="margin: 2px 0 0 0;"><strong>Status:</strong> ${order.status.toUpperCase()}</p>
+          </div>
+        </div>
+
+        <div class="details">
+          <div class="details-box">
+            <h3>Bill To:</h3>
+            <p style="margin: 0; font-weight: bold;">${order.customer_name}</p>
+            <p style="margin: 5px 0;">${order.customer_email}</p>
+            <p style="margin: 5px 0;">Phone: ${order.customer_phone}</p>
+          </div>
+          <div class="details-box">
+            <h3>Ship To:</h3>
+            <p style="margin: 0; font-weight: bold;">${order.customer_name}</p>
+            <p style="margin: 5px 0; white-space: pre-line;">${order.shipping_address}</p>
+            <p style="margin: 5px 0;">${order.shipping_city}, ${order.shipping_state || ""} ${order.shipping_zip}</p>
+          </div>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th style="text-align: left;">Item</th>
+              <th style="width: 10%; text-align: center;">Qty</th>
+              <th style="width: 20%; text-align: right;">Unit Price</th>
+              <th style="width: 20%; text-align: right;">Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${itemsHtml}
+          </tbody>
+        </table>
+
+        <div class="totals">
+          <p>Subtotal: ₹${(order.subtotal_cents / 100).toFixed(2)}</p>
+          <p>Shipping: ${order.shipping_cents === 0 ? "Free" : `₹${(order.shipping_cents / 100).toFixed(2)}`}</p>
+          <div class="grand-total">Total: ₹${(order.total_cents / 100).toFixed(2)}</div>
+        </div>
+
+        <div class="footer">
+          Thank you for shopping with The Variety Nutrition!<br>
+          For support, contact customer@thevarietynutrition.com
+        </div>
+
+        <script>
+          window.onload = function() {
+            window.print();
+            setTimeout(function() { window.close(); }, 500);
+          }
+        </script>
+      </body>
+    </html>
+  `;
+
+  printWindow.document.open();
+  printWindow.document.write(html);
+  printWindow.document.close();
+}
+
+function printAddressLabel(order: any) {
+  const printWindow = window.open("", "_blank");
+  if (!printWindow) return;
+
+  const html = `
+    <html>
+      <head>
+        <title>Shipping Label - ${order.order_number}</title>
+        <style>
+          body { 
+            font-family: Arial, sans-serif; 
+            margin: 0; 
+            padding: 15px; 
+            width: 3.8in; 
+            height: 5.8in; 
+            box-sizing: border-box; 
+          }
+          .label-container {
+            border: 2px solid #000;
+            padding: 15px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+          }
+          .title {
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            border-bottom: 2px solid #000;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+          }
+          .section {
+            margin-bottom: 15px;
+          }
+          .section-title {
+            font-size: 10px;
+            font-weight: bold;
+            text-transform: uppercase;
+            color: #555;
+            margin-bottom: 4px;
+            border-bottom: 1px dashed #ccc;
+          }
+          .address-text {
+            font-size: 13px;
+            line-height: 1.4;
+            font-weight: bold;
+          }
+          .order-meta {
+            border-top: 2px solid #000;
+            padding-top: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+          }
+          .payment-badge {
+            background: #000;
+            color: #fff;
+            padding: 4px 8px;
+            font-weight: bold;
+            font-size: 12px;
+            border-radius: 3px;
+            text-transform: uppercase;
+          }
+        </style>
+      </head>
+      <body>
+        <div class="label-container">
+          <div>
+            <div class="title">The Variety Nutrition</div>
+            
+            <div class="section">
+              <div class="section-title">Deliver To:</div>
+              <div class="address-text">
+                ${order.customer_name}<br/>
+                ${order.shipping_address}<br/>
+                ${order.shipping_city}, ${order.shipping_state || ""} - ${order.shipping_zip}<br/>
+                Phone: ${order.customer_phone}
+              </div>
+            </div>
+            
+            <div class="section">
+              <div class="section-title">Sender Details (From):</div>
+              <div style="font-size: 11px; line-height: 1.3;">
+                <strong>The Variety Nutrition</strong><br/>
+                Pegasus Tower, Office No. 702, 7th Floor,<br/>
+                Sector 68, Noida, Uttar Pradesh 201307<br/>
+                Phone: +91 99710 95414
+              </div>
+            </div>
+          </div>
+          
+          <div class="order-meta">
+            <div>
+              <strong>Order:</strong> ${order.order_number}<br/>
+              <strong>Date:</strong> ${new Date(order.created_at).toLocaleDateString()}
+            </div>
+            <div class="payment-badge">
+              Prepaid
+            </div>
+          </div>
+        </div>
+
+        <script>
+          window.onload = function() {
+            window.print();
+            setTimeout(function() { window.close(); }, 500);
+          }
+        </script>
+      </body>
+    </html>
+  `;
+
+  printWindow.document.open();
+  printWindow.document.write(html);
+  printWindow.document.close();
+}
+
 function OrderNotifier() {
   const qc = useQueryClient();
   const count = useServerFn(adminOrderCount);
@@ -529,6 +756,26 @@ function OrdersAdmin() {
                     {o.shipping_address}<br />
                     {o.shipping_city}{o.shipping_state ? `, ${o.shipping_state}` : ""} {o.shipping_zip}<br />
                     {o.shipping_country}
+                  </div>
+                  <div className="mt-4 pt-3 border-t border-border/40 flex flex-wrap gap-2">
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      type="button"
+                      onClick={() => printInvoice(o, items)}
+                      className="text-xs h-8 border-primary/20 hover:border-primary shrink-0"
+                    >
+                      Print Invoice
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      type="button"
+                      onClick={() => printAddressLabel(o)}
+                      className="text-xs h-8 border-primary/20 hover:border-primary shrink-0"
+                    >
+                      Print Address Slip
+                    </Button>
                   </div>
                 </div>
 

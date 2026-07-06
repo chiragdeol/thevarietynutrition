@@ -102,7 +102,7 @@ export async function sendOrderPlacedNotification(orderId: string) {
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eee;">
           <div style="text-align: center; margin-bottom: 20px;">
-            <h2 style="color: #111;">The Variety Nutrition</h2>
+            <img src="https://thevarietynutrition.com/__l5e/assets-v1/a083104b-4bb3-4afd-8dbd-e8e303b136d5/tvn-logo.png" alt="The Variety Nutrition" style="height: 60px; width: auto; margin-bottom: 10px;" />
             <p style="color: #666; font-size: 14px;">Thank you for your order!</p>
           </div>
           <p>Dear <strong>${order.customer_name}</strong>,</p>
@@ -209,7 +209,7 @@ export async function sendOrderPaidNotification(orderId: string) {
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eee;">
           <div style="text-align: center; margin-bottom: 20px;">
-            <h2 style="color: #111;">The Variety Nutrition</h2>
+            <img src="https://thevarietynutrition.com/__l5e/assets-v1/a083104b-4bb3-4afd-8dbd-e8e303b136d5/tvn-logo.png" alt="The Variety Nutrition" style="height: 60px; width: auto; margin-bottom: 10px;" />
             <h3 style="color: #2e7d32;">Payment Confirmed!</h3>
           </div>
           <p>Dear <strong>${order.customer_name}</strong>,</p>
