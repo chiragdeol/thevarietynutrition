@@ -38,3 +38,6 @@ dist-ssr
 # Scratch directory
 scratch/
 
+# Archives
+*.zip
+*.tar.gz

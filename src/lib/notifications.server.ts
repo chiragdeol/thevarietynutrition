@@ -3,7 +3,7 @@ import nodemailer from "nodemailer";
 const smtpHost = process.env.SMTP_HOST || "smtp.hostinger.com";
 const smtpPort = parseInt(process.env.SMTP_PORT || "587", 10);
 export const smtpUser = process.env.SMTP_USER || "customer@thevarietynutrition.com";
-const smtpPass = process.env.SMTP_PASS || "#eli#yjrkdmYMeRWq86L3n*JaUk^TnYv";
+const smtpPass = process.env.SMTP_PASS;
 
 // Create transporter
 export const transporter = nodemailer.createTransport({
