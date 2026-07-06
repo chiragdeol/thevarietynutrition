@@ -1,12 +1,12 @@
 import { o as __toESM } from "../_runtime.mjs";
 import { t as require_nodemailer } from "../_libs/nodemailer+unenv.mjs";
 import process from "node:process";
-//#region node_modules/.nitro/vite/services/ssr/assets/notifications.server-CKBg6itt.js
+//#region node_modules/.nitro/vite/services/ssr/assets/notifications.server-C8ALsqAK.js
 var import_nodemailer = /* @__PURE__ */ __toESM(require_nodemailer());
-var smtpHost = process.env.CUSTOMER_SMTP_HOST || "smtp.hostinger.com";
-var smtpPort = parseInt(process.env.CUSTOMER_SMTP_PORT || "587", 10);
-var smtpUser = process.env.CUSTOMER_SMTP_USER || "customer@thevarietynutrition.com";
-var smtpPass = process.env.CUSTOMER_SMTP_PASS;
+var smtpHost = (process.env.CUSTOMER_SMTP_HOST || "smtp.hostinger.com").trim();
+var smtpPort = parseInt((process.env.CUSTOMER_SMTP_PORT || "587").trim(), 10);
+var smtpUser = (process.env.CUSTOMER_SMTP_USER || "customer@thevarietynutrition.com").trim();
+var smtpPass = process.env.CUSTOMER_SMTP_PASS ? process.env.CUSTOMER_SMTP_PASS.trim() : void 0;
 var transporter = import_nodemailer.default.createTransport({
 	host: smtpHost,
 	port: smtpPort,
