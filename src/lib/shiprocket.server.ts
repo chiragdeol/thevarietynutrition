@@ -146,3 +146,68 @@ export const shiprocketBookShipment = createServerFn({ method: "POST" })
       shiprocketShipmentId,
     };
   });
+
+// Server function to allocate AWB and fetch shipping label PDF from Shiprocket
+export const shiprocketGetLabel = createServerFn({ method: "POST" })
+  .inputValidator((orderId: string) => orderId)
+  .handler(async ({ data: orderId }) => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+    // 1. Fetch order details
+    const { data: order, error } = await supabaseAdmin
+      .from("orders")
+      .select("shiprocket_shipment_id")
+      .eq("id", orderId)
+      .maybeSingle();
+
+    if (error || !order || !order.shiprocket_shipment_id) {
+      throw new Error("Shipment ID not found. Please book shipment first.");
+    }
+
+    const shipmentId = order.shiprocket_shipment_id;
+
+    // 2. Get auth token
+    const token = await getShiprocketToken();
+
+    // 3. Request AWB assignment first (if not already assigned)
+    try {
+      const awbRes = await fetch("https://apiv2.shiprocket.in/v1/external/courier/assign/awb", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ shipment_id: shipmentId }),
+      });
+      const awbData = await awbRes.json();
+      console.log("Shiprocket AWB Assignment:", awbData);
+    } catch (e) {
+      console.error("AWB assignment error:", e);
+    }
+
+    // 4. Generate the Shipping Label PDF
+    const labelRes = await fetch("https://apiv2.shiprocket.in/v1/external/courier/generate/label", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ shipment_id: [parseInt(shipmentId, 10)] }),
+    });
+
+    if (!labelRes.ok) {
+      const errText = await labelRes.text();
+      console.error("Shiprocket Label API Error:", errText);
+      throw new Error(`Shiprocket API Error: ${errText}`);
+    }
+
+    const labelData = await labelRes.json();
+    if (!labelData.label_url) {
+      throw new Error(labelData.message || "Failed to generate label from Shiprocket");
+    }
+
+    return {
+      success: true,
+      labelUrl: labelData.label_url,
+    };
+  });

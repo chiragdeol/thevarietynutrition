@@ -34,7 +34,7 @@ import {
   adminMapTempImage,
 } from "@/lib/admin-gate.functions";
 import { Button } from "@/components/ui/button";
-import { shiprocketBookShipment } from "@/lib/shiprocket.server";
+import { shiprocketBookShipment, shiprocketGetLabel } from "@/lib/shiprocket.server";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
@@ -345,9 +345,28 @@ function OrdersAdmin() {
   const list = useServerFn(adminListOrders);
   const update = useServerFn(adminUpdateOrderStatus);
   const bookShipment = useServerFn(shiprocketBookShipment);
+  const getLabel = useServerFn(shiprocketGetLabel);
   const [expanded, setExpanded] = useState<string | null>(null);
   const [bookingId, setBookingId] = useState<string | null>(null);
+  const [printingId, setPrintingId] = useState<string | null>(null);
   const { data } = useQuery({ queryKey: ["adm-orders"], queryFn: () => list({}) });
+
+  async function handlePrintLabel(id: string) {
+    setPrintingId(id);
+    try {
+      const res = await getLabel({ data: id });
+      if (res.labelUrl) {
+        window.open(res.labelUrl, "_blank");
+        toast.success("Opening shipping label PDF...");
+      } else {
+        toast.error("Failed to generate label URL");
+      }
+    } catch (e: any) {
+      toast.error(e.message || "Failed to generate shipping label");
+    } finally {
+      setPrintingId(null);
+    }
+  }
 
   async function change(id: string, status: string) {
     try { await update({ data: { id, status } }); toast.success("Updated"); qc.invalidateQueries({ queryKey: ["adm-orders"] }); }
@@ -420,7 +439,7 @@ function OrdersAdmin() {
                               <span className="font-mono font-medium">{o.shiprocket_order_id}</span>
                             </div>
                           )}
-                          <div className="pt-1">
+                          <div className="pt-1 flex flex-col gap-2">
                             <a
                               href={`https://shiprocket.co/tracking/${o.shiprocket_shipment_id}`}
                               target="_blank"
@@ -429,6 +448,16 @@ function OrdersAdmin() {
                             >
                               Track on Shiprocket Dashboard
                             </a>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              type="button"
+                              disabled={printingId === o.id}
+                              onClick={() => handlePrintLabel(o.id)}
+                              className="w-full sm:w-auto text-xs h-8 border-accent text-accent hover:bg-accent hover:text-accent-foreground mt-1"
+                            >
+                              {printingId === o.id ? "Generating Label..." : "Print/Download Shipping Label"}
+                            </Button>
                           </div>
                         </div>
                       ) : (
