@@ -412,13 +412,23 @@ export const adminTestSMTPSend = createServerFn({ method: "POST" })
     try {
       const { transporter, smtpUser } = await import("@/lib/notifications.server");
       
+      const host = process.env.SMTP_HOST || "smtp.hostinger.com";
+      const port = process.env.SMTP_PORT || "465";
+      const envPass = process.env.SMTP_PASS;
+
       // Test SMTP connection verification
-      await new Promise<void>((resolve, reject) => {
-        transporter.verify((error) => {
-          if (error) reject(error);
-          else resolve();
+      try {
+        await new Promise<void>((resolve, reject) => {
+          transporter.verify((error) => {
+            if (error) reject(error);
+            else resolve();
+          });
         });
-      });
+      } catch (err: any) {
+        throw new Error(
+          `${err.message || err}\n\n[Diagnostics Info]\nSender User: ${smtpUser}\nHost: ${host}\nPort: ${port}\nSMTP_PASS env set: ${envPass ? "Yes" : "No"}\nSMTP_PASS env length: ${envPass ? envPass.length : 0}`
+        );
+      }
 
       // Send a test email to admin
       await transporter.sendMail({
