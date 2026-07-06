@@ -82,6 +82,15 @@ export const adminUpdateOrderStatus = createServerFn({ method: "POST" })
     const sb = await admin();
     const { error } = await sb.from("orders").update({ status: data.status as never }).eq("id", data.id);
     if (error) throw new Error(error.message);
+
+    // If status is marked as paid, trigger customer paid notification
+    if (data.status === "paid") {
+      const { sendOrderPaidNotification } = await import("@/lib/notifications.server");
+      sendOrderPaidNotification(data.id).catch((err) => {
+        console.error("Failed to send payment confirmation notification:", err);
+      });
+    }
+
     return { ok: true };
   });
 

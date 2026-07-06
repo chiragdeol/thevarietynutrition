@@ -11,6 +11,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { createServerFn } from "@tanstack/react-start";
+import { sendOrderPlacedNotification } from "@/lib/notifications.server";
 
 export const Route = createFileRoute("/checkout")({
   head: () => ({ meta: [{ title: "Checkout — The Variety Nutrition" }] }),
@@ -131,6 +132,11 @@ export const placeOrderServerFn = createServerFn({ method: "POST" })
       .insert(itemsWithOrderId);
 
     if (oiErr) throw oiErr;
+
+    // Trigger email and WhatsApp notifications in the background
+    sendOrderPlacedNotification(order.id).catch((err) => {
+      console.error("Failed to send order placement notification:", err);
+    });
 
     return { orderId: order.id };
   });
