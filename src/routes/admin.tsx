@@ -166,20 +166,41 @@ function playAlarm() {
     if (!AC) return;
     const ctx = new AC();
     const now = ctx.currentTime;
-    const beeps = [0, 0.25, 0.5];
-    beeps.forEach((offset) => {
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.type = "sine";
-      osc.frequency.setValueAtTime(880, now + offset);
-      gain.gain.setValueAtTime(0.0001, now + offset);
-      gain.gain.exponentialRampToValueAtTime(0.4, now + offset + 0.02);
-      gain.gain.exponentialRampToValueAtTime(0.0001, now + offset + 0.18);
-      osc.connect(gain).connect(ctx.destination);
-      osc.start(now + offset);
-      osc.stop(now + offset + 0.2);
+    
+    // Play 5 double-beeps spread over 3 seconds for a loud, repeating alarm
+    const beepOffsets = [0, 0.15, 0.6, 0.75, 1.2, 1.35, 1.8, 1.95, 2.4, 2.55];
+    
+    beepOffsets.forEach((offset) => {
+      // Oscillator 1 (piercing tone - square wave)
+      const osc1 = ctx.createOscillator();
+      const gain1 = ctx.createGain();
+      osc1.type = "square"; // Much sharper and louder than a sine wave
+      osc1.frequency.setValueAtTime(987, now + offset); // Piercing high B note
+      
+      gain1.gain.setValueAtTime(0.0001, now + offset);
+      gain1.gain.linearRampToValueAtTime(0.5, now + offset + 0.02);
+      gain1.gain.exponentialRampToValueAtTime(0.0001, now + offset + 0.12);
+      
+      osc1.connect(gain1).connect(ctx.destination);
+      osc1.start(now + offset);
+      osc1.stop(now + offset + 0.15);
+
+      // Oscillator 2 (buzzer tone - sawtooth wave for resonance)
+      const osc2 = ctx.createOscillator();
+      const gain2 = ctx.createGain();
+      osc2.type = "sawtooth"; // Creates a buzzer-like alert sound
+      osc2.frequency.setValueAtTime(880, now + offset); // A note
+      
+      gain2.gain.setValueAtTime(0.0001, now + offset);
+      gain2.gain.linearRampToValueAtTime(0.3, now + offset + 0.02);
+      gain2.gain.exponentialRampToValueAtTime(0.0001, now + offset + 0.12);
+      
+      osc2.connect(gain2).connect(ctx.destination);
+      osc2.start(now + offset);
+      osc2.stop(now + offset + 0.15);
     });
-    setTimeout(() => ctx.close?.(), 1500);
+
+    setTimeout(() => ctx.close?.(), 4000);
   } catch {}
 }
 
