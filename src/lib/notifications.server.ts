@@ -11,8 +11,8 @@ export const transporter = nodemailer.createTransport({
   port: smtpPort,
   secure: smtpPort === 465, // true for 465, false for 587/other ports
   auth: {
-    user: "customer@thevarietynutrition.com",
-    pass: "Chirag@123#321$",
+    user: smtpUser,
+    pass: smtpPass,
   },
   tls: {
     rejectUnauthorized: false // Prevents Hostinger SSL certificate validation errors
