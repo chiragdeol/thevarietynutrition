@@ -433,7 +433,7 @@ export const adminTestSMTPSend = createServerFn({ method: "POST" })
       // Send a test email to admin
       await transporter.sendMail({
         from: `"The Variety Nutrition Test" <${smtpUser}>`,
-        to: "customercare@nutraj.com",
+        to: "cdeol48@gmail.com",
         subject: "SMTP Connection Test Success",
         text: "Congratulations! Your Hostinger SMTP email connection is configured correctly and working fine.",
       });

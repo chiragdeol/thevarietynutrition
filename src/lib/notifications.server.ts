@@ -137,7 +137,7 @@ export async function sendOrderPlacedNotification(orderId: string) {
           </p>
 
           <p style="margin-top: 30px; font-size: 12px; color: #888; text-align: center;">
-            This is an automated email from The Variety Nutrition. If you have any questions, contact us at customercare@nutraj.com.
+            This is an automated email from The Variety Nutrition. If you have any questions, contact us at customer@thevarietynutrition.com.
           </p>
         </div>
       `,
@@ -152,7 +152,7 @@ export async function sendOrderPlacedNotification(orderId: string) {
     // Email to Admin / Support
     const adminMailOptions = {
       from: `"The Variety Nutrition Alerts" <${smtpUser}>`,
-      to: "customercare@nutraj.com", // Admin contact care
+      to: "cdeol48@gmail.com", // Admin contact care
       subject: `🔔 New Order Received - ${order.order_number}`,
       html: `
         <div style="font-family: Arial, sans-serif; padding: 20px; border: 1px solid #ccc;">
@@ -218,7 +218,7 @@ export async function sendOrderPaidNotification(orderId: string) {
           <p>Order Total: <strong>${formatINR(order.total_cents)}</strong></p>
 
           <p style="margin-top: 30px; font-size: 12px; color: #888; text-align: center;">
-            This is an automated email from The Variety Nutrition. If you have any questions, contact us at customercare@nutraj.com.
+            This is an automated email from The Variety Nutrition. If you have any questions, contact us at customer@thevarietynutrition.com.
           </p>
         </div>
       `,

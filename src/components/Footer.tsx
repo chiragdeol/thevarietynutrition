@@ -60,8 +60,8 @@ export function Footer() {
               <div className="flex items-center justify-center w-10 h-10 rounded-full border border-white/20 flex-shrink-0">
                 <Mail className="w-5 h-5 text-white/80" />
               </div>
-              <a href="mailto:customercare@nutraj.com" className="text-sm md:text-base text-white/80 font-normal hover:text-white transition-colors">
-                customercare@nutraj.com
+              <a href="mailto:customer@thevarietynutrition.com" className="text-sm md:text-base text-white/80 font-normal hover:text-white transition-colors">
+                customer@thevarietynutrition.com
               </a>
             </div>
           </div>
