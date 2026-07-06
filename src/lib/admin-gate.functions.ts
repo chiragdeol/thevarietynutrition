@@ -412,9 +412,9 @@ export const adminTestSMTPSend = createServerFn({ method: "POST" })
     try {
       const { transporter, smtpUser } = await import("@/lib/notifications.server");
       
-      const host = process.env.SMTP_HOST || "smtp.hostinger.com";
-      const port = process.env.SMTP_PORT || "465";
-      const envPass = process.env.SMTP_PASS;
+      const host = process.env.CUSTOMER_SMTP_HOST || "smtp.hostinger.com";
+      const port = process.env.CUSTOMER_SMTP_PORT || "465";
+      const envPass = process.env.CUSTOMER_SMTP_PASS;
 
       // Test SMTP connection verification
       try {
@@ -426,7 +426,7 @@ export const adminTestSMTPSend = createServerFn({ method: "POST" })
         });
       } catch (err: any) {
         throw new Error(
-          `${err.message || err}\n\n[Diagnostics Info]\nSender User: ${smtpUser}\nHost: ${host}\nPort: ${port}\nSMTP_PASS env set: ${envPass ? "Yes" : "No"}\nSMTP_PASS env length: ${envPass ? envPass.length : 0}`
+          `${err.message || err}\n\n[Diagnostics Info]\nSender User: ${smtpUser}\nHost: ${host}\nPort: ${port}\nCUSTOMER_SMTP_PASS env set: ${envPass ? "Yes" : "No"}\nCUSTOMER_SMTP_PASS env length: ${envPass ? envPass.length : 0}`
         );
       }
 

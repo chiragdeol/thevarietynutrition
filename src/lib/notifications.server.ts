@@ -1,9 +1,9 @@
 import nodemailer from "nodemailer";
 
-const smtpHost = process.env.SMTP_HOST || "smtp.hostinger.com";
-const smtpPort = parseInt(process.env.SMTP_PORT || "587", 10);
-export const smtpUser = process.env.SMTP_USER || "customer@thevarietynutrition.com";
-const smtpPass = process.env.SMTP_PASS;
+const smtpHost = process.env.CUSTOMER_SMTP_HOST || "smtp.hostinger.com";
+const smtpPort = parseInt(process.env.CUSTOMER_SMTP_PORT || "587", 10);
+export const smtpUser = process.env.CUSTOMER_SMTP_USER || "customer@thevarietynutrition.com";
+const smtpPass = process.env.CUSTOMER_SMTP_PASS;
 
 // Create transporter
 export const transporter = nodemailer.createTransport({
