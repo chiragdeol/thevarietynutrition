@@ -407,3 +407,31 @@ export const adminMapTempImage = createServerFn({ method: "POST" })
     return { success: true, url: dbUrl };
   });
 
+export const adminTestSMTPSend = createServerFn({ method: "POST" })
+  .handler(async () => {
+    try {
+      const { transporter, smtpUser } = await import("@/lib/notifications.server");
+      
+      // Test SMTP connection verification
+      await new Promise<void>((resolve, reject) => {
+        transporter.verify((error) => {
+          if (error) reject(error);
+          else resolve();
+        });
+      });
+
+      // Send a test email to admin
+      await transporter.sendMail({
+        from: `"The Variety Nutrition Test" <${smtpUser}>`,
+        to: "customercare@nutraj.com",
+        subject: "SMTP Connection Test Success",
+        text: "Congratulations! Your Hostinger SMTP email connection is configured correctly and working fine.",
+      });
+
+      return { success: true, message: `SMTP connection verified! Test email sent successfully from ${smtpUser}.` };
+    } catch (e: any) {
+      console.error("SMTP Test Error:", e);
+      return { success: false, error: e.message || String(e) };
+    }
+  });
+

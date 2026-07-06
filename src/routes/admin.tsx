@@ -32,6 +32,7 @@ import {
   adminReorderMedia,
   adminListTempImages,
   adminMapTempImage,
+  adminTestSMTPSend,
 } from "@/lib/admin-gate.functions";
 import { Button } from "@/components/ui/button";
 import { shiprocketBookShipment, shiprocketGetLabel } from "@/lib/shiprocket.server";
@@ -241,6 +242,9 @@ function OrderNotifier() {
 
 function NotificationSettings() {
   const [s, setS] = useState<NotifSettings>(DEFAULT_SETTINGS);
+  const testSMTP = useServerFn(adminTestSMTPSend);
+  const [testingEmail, setTestingEmail] = useState(false);
+
   useEffect(() => { setS(readSettings()); }, []);
   function update<K extends keyof NotifSettings>(key: K, val: NotifSettings[K]) {
     const next = { ...s, [key]: val };
@@ -253,6 +257,24 @@ function NotificationSettings() {
     if (perm === "granted") { toast.success("Browser notifications enabled"); update("browserOn", true); }
     else toast.error("Permission denied");
   }
+
+  async function handleTestEmail() {
+    setTestingEmail(true);
+    try {
+      const res = await testSMTP({});
+      if (res.success) {
+        toast.success(res.message || "SMTP verified successfully!");
+      } else {
+        alert(`SMTP Connection Failed!\n\nError: ${res.error}\n\nPlease verify that customer@thevarietynutrition.com email address has been created in your Hostinger Email Account section and the SMTP_PASS matches its login password, then click "Restart Application" in Hostinger.`);
+        toast.error("SMTP connection failed");
+      }
+    } catch (e: any) {
+      toast.error(e.message || "Failed to test SMTP connection");
+    } finally {
+      setTestingEmail(false);
+    }
+  }
+
   const perm = typeof Notification !== "undefined" ? Notification.permission : "unsupported";
   return (
     <div className="mt-6 max-w-2xl space-y-4">
@@ -297,8 +319,11 @@ function NotificationSettings() {
             </select>
           </div>
         </div>
-        <div className="pt-2 border-t border-border flex gap-2">
+        <div className="pt-2 border-t border-border flex flex-wrap gap-2">
           <Button variant="outline" onClick={() => playAlarm()}>Test alarm</Button>
+          <Button variant="outline" onClick={handleTestEmail} disabled={testingEmail}>
+            {testingEmail ? "Testing Connection..." : "Test Email Connection"}
+          </Button>
           <Button variant="outline" onClick={() => { writeSettings(DEFAULT_SETTINGS); setS(DEFAULT_SETTINGS); toast.success("Reset to defaults"); }}>Reset defaults</Button>
         </div>
       </div>

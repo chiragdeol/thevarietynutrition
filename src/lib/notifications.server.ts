@@ -2,11 +2,11 @@ import nodemailer from "nodemailer";
 
 const smtpHost = process.env.SMTP_HOST || "smtp.hostinger.com";
 const smtpPort = parseInt(process.env.SMTP_PORT || "465", 10);
-const smtpUser = process.env.SMTP_USER || "customer@thevarietynutrition.com";
+export const smtpUser = process.env.SMTP_USER || "customer@thevarietynutrition.com";
 const smtpPass = process.env.SMTP_PASS || "#eli#yjrkdmYMeRWq86L3n*JaUk^TnYv";
 
 // Create transporter
-const transporter = nodemailer.createTransport({
+export const transporter = nodemailer.createTransport({
   host: smtpHost,
   port: smtpPort,
   secure: smtpPort === 465, // true for 465, false for other ports
